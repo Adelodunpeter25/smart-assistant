@@ -11,6 +11,11 @@ const About = lazy(() => import('@/pages/public/About'));
 const Contact = lazy(() => import('@/pages/public/Contact'));
 const Dashboard = lazy(() => import('@/pages/dashboard/Dashboard'));
 const Chat = lazy(() => import('@/pages/dashboard/Chat'));
+const Tasks = lazy(() => import('@/pages/dashboard/Tasks'));
+const Notes = lazy(() => import('@/pages/dashboard/Notes'));
+const Calendar = lazy(() => import('@/pages/dashboard/Calendar'));
+const Timers = lazy(() => import('@/pages/dashboard/Timers'));
+const Settings = lazy(() => import('@/pages/dashboard/Settings'));
 const NotFound = lazy(() => import('@/pages/public/NotFound'));
 
 function App() {
@@ -48,6 +53,11 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/dashboard/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+          <Route path="/dashboard/tasks" element={<ProtectedRoute><Tasks /></ProtectedRoute>} />
+          <Route path="/dashboard/notes" element={<ProtectedRoute><Notes /></ProtectedRoute>} />
+          <Route path="/dashboard/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
+          <Route path="/dashboard/timers" element={<ProtectedRoute><Timers /></ProtectedRoute>} />
+          <Route path="/dashboard/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

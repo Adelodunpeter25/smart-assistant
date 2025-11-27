@@ -1,10 +1,9 @@
 import { memo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, MessageSquare, CheckSquare, Menu, X } from 'lucide-react';
+import { Home, MessageSquare, CheckSquare, Menu, X, Calendar, Clock, Settings, LogOut, StickyNote } from 'lucide-react';
 import { useAuthStore } from '@/stores';
 import { useAuth } from '@/hooks';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, Settings, LogOut } from 'lucide-react';
 
 export const BottomBar = memo(() => {
   const location = useLocation();
@@ -19,6 +18,7 @@ export const BottomBar = memo(() => {
   ];
 
   const menuItems = [
+    { icon: StickyNote, label: 'Notes', path: '/dashboard/notes' },
     { icon: Calendar, label: 'Calendar', path: '/dashboard/calendar' },
     { icon: Clock, label: 'Timers', path: '/dashboard/timers' },
     { icon: Settings, label: 'Settings', path: '/dashboard/settings' },

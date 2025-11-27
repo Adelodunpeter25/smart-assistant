@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/stores';
 import { useAuth } from '@/hooks';
 import { Button } from '@/components/ui/button';
-import { Home, MessageSquare, CheckSquare, Calendar, Clock, Settings, LogOut } from 'lucide-react';
+import { Home, MessageSquare, CheckSquare, Calendar, Clock, Settings, LogOut, StickyNote } from 'lucide-react';
 
 export const Sidebar = memo(() => {
   const { user } = useAuthStore();
@@ -14,6 +14,7 @@ export const Sidebar = memo(() => {
     { icon: Home, label: 'Overview', path: '/dashboard' },
     { icon: MessageSquare, label: 'Chat', path: '/dashboard/chat' },
     { icon: CheckSquare, label: 'Tasks', path: '/dashboard/tasks' },
+    { icon: StickyNote, label: 'Notes', path: '/dashboard/notes' },
     { icon: Calendar, label: 'Calendar', path: '/dashboard/calendar' },
     { icon: Clock, label: 'Timers', path: '/dashboard/timers' },
     { icon: Settings, label: 'Settings', path: '/dashboard/settings' },
