@@ -19,6 +19,7 @@ from app.schemas.calculator import (
     ConvertCurrencyResponse,
 )
 from app.schemas.task import TaskCreate, TaskUpdate, TaskResponse
+from app.schemas.timer import TimerCreate, TimerResponse
 from app.schemas.chat import ChatRequest, ChatResponse
 from app.schemas.response import SuccessResponse, ErrorResponse
 
@@ -46,6 +47,8 @@ __all__ = [
     "TaskCreate",
     "TaskUpdate",
     "TaskResponse",
+    "TimerCreate",
+    "TimerResponse",
     "ChatRequest",
     "ChatResponse",
     "SuccessResponse",

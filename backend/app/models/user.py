@@ -23,6 +23,7 @@ class User(Base):
     tasks = relationship("Task", back_populates="user", cascade="all, delete-orphan")
     notes = relationship("Note", back_populates="user", cascade="all, delete-orphan")
     calendar_events = relationship("CalendarEvent", back_populates="user", cascade="all, delete-orphan")
+    timers = relationship("Timer", back_populates="user", cascade="all, delete-orphan")
     refresh_tokens = relationship("RefreshToken", back_populates="user", cascade="all, delete-orphan")
 
 
