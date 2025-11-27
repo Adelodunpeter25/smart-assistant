@@ -213,4 +213,21 @@ TOOLS = [
             },
         },
     },
+    # Currency conversion tool
+    {
+        "type": "function",
+        "function": {
+            "name": "convert_currency",
+            "description": "Convert currency using live exchange rates",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "amount": {"type": "number", "description": "Amount to convert"},
+                    "from_currency": {"type": "string", "description": "Source currency code (e.g., USD, NGN, GBP)"},
+                    "to_currency": {"type": "string", "description": "Target currency code (e.g., USD, NGN, GBP)"},
+                },
+                "required": ["amount", "from_currency", "to_currency"],
+            },
+        },
+    },
 ]

@@ -111,6 +111,14 @@ class ToolExecutor:
             expression = parameters.get("expression")
             result = CalculatorService.calculate(expression)
             return {"success": True, "data": {"result": result}}
+        
+        # Currency conversion tool
+        elif tool_name == "convert_currency":
+            amount = parameters.get("amount")
+            from_currency = parameters.get("from_currency")
+            to_currency = parameters.get("to_currency")
+            result = await CalculatorService.convert_currency(amount, from_currency, to_currency)
+            return {"success": True, "data": result}
 
         else:
             return {"success": False, "error": f"Unknown tool: {tool_name}"}
