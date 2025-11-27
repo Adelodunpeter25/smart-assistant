@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { api } from '@/services/api';
 import { wsService } from '@/services/websocket';
+import { useAuthStore } from '@/stores';
 import type { LoginRequest, RegisterRequest, AuthResponse, User } from '@/types';
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, setUser, logout: clearUser } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -52,7 +53,7 @@ export function useAuth() {
     } finally {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
-      setUser(null);
+      clearUser();
       wsService.disconnect();
     }
   };
