@@ -57,3 +57,6 @@ backend/data/*
 # Temporary files
 tmp/
 temp/
+
+# Celery
+celerybeat-schedule*
