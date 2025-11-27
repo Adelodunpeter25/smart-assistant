@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute = memo(({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = useAuthStore();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+  return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
 });
 
 ProtectedRoute.displayName = 'ProtectedRoute';

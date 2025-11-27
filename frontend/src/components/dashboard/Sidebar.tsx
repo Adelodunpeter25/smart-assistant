@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/stores';
 import { useAuth } from '@/hooks';
 import { Button } from '@/components/ui/button';
@@ -7,6 +8,7 @@ import { Home, MessageSquare, CheckSquare, Calendar, Clock, Settings, LogOut } f
 export const Sidebar = memo(() => {
   const { user } = useAuthStore();
   const { logout } = useAuth();
+  const location = useLocation();
 
   const navItems = [
     { icon: Home, label: 'Overview', path: '/dashboard' },
@@ -28,14 +30,16 @@ export const Sidebar = memo(() => {
 
       <nav className="flex-1 p-4 space-y-2">
         {navItems.map((item) => (
-          <a
+          <Link
             key={item.path}
-            href={item.path}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-accent transition-colors"
+            to={item.path}
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-accent transition-colors ${
+              location.pathname === item.path ? 'bg-accent' : ''
+            }`}
           >
             <item.icon size={20} />
             <span>{item.label}</span>
-          </a>
+          </Link>
         ))}
       </nav>
 
