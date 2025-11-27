@@ -18,7 +18,7 @@ export interface Message {
   content: string
   isUser: boolean
   role?: string
-  timestamp: Date
+  timestamp: Date | string
   toolUsed?: string
   tool_calls?: string[]
 }
