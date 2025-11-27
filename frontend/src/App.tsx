@@ -1,44 +1,27 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useAuthStore } from '@/stores';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { lazy, Suspense, useEffect } from 'react';
 import { useAuth } from '@/hooks';
-import { Login, Register } from '@/pages/auth';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuthStore();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
-}
-
-function Dashboard() {
-  return (
-    <div className="min-h-screen bg-background p-8">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <p className="text-muted-foreground">Welcome to Smart Assistant</p>
-    </div>
-  );
-}
+const Login = lazy(() => import('@/pages/auth/Login'));
+const Register = lazy(() => import('@/pages/auth/Register'));
 
 function App() {
-  const { isAuthenticated } = useAuthStore();
-  const { getMe } = useAuth();
+  const { initAuth } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token && !isAuthenticated) {
-      getMe().catch(() => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-      });
-    }
-  }, [isAuthenticated, getMe]);
+    initAuth();
+  }, []);
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      </Routes>
+      <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<ProtectedRoute><div>Dashboard</div></ProtectedRoute>} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

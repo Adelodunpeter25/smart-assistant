@@ -63,14 +63,29 @@ export function useAuth() {
     try {
       const response = await api.get<User>('/auth/me');
       setUser(response.data);
+      const token = localStorage.getItem('access_token');
+      if (token) wsService.connect(token);
       return response.data;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to get user');
+      clearUser();
       throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  return { user, loading, error, register, login, logout, getMe };
+  const initAuth = async () => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      try {
+        await getMe();
+      } catch {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+      }
+    }
+  };
+
+  return { user, loading, error, register, login, logout, getMe, initAuth };
 }
