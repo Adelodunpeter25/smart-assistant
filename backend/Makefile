@@ -34,6 +34,12 @@ migrate-history:
 run:
 	uv run uvicorn main:app --reload --port 8000
 
+celery-worker:
+	uv run celery -A app.backgroundjobs.celery_app worker --loglevel=info
+
+celery-beat:
+	uv run celery -A app.backgroundjobs.celery_app beat --loglevel=info
+
 test:
 	uv run pytest
 
