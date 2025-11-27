@@ -11,8 +11,8 @@ export const CTA = memo(() => {
           <p className="text-xl text-muted-foreground">
             Join thousands of users boosting their productivity with AI
           </p>
-          <Button size="lg" asChild>
-            <a href="/register">Create Free Account</a>
+          <Button size="lg" onClick={() => window.dispatchEvent(new Event('openRegister'))}>
+            Create Free Account
           </Button>
         </Card>
       </div>

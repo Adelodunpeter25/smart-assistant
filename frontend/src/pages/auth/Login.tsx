@@ -3,10 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Eye, EyeOff } from 'lucide-react';
 
-const Login = memo(() => {
+interface LoginProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSwitchToRegister: () => void;
+}
+
+const Login = memo(({ open, onOpenChange, onSwitchToRegister }: LoginProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +23,7 @@ const Login = memo(() => {
     e.preventDefault();
     try {
       await login({ email, password });
+      onOpenChange(false);
       navigate('/');
     } catch (err) {
       console.error('Login failed:', err);
@@ -24,13 +31,12 @@ const Login = memo(() => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 liquid-gradient">
-      <Card glass className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
-        </CardHeader>
-        <CardContent>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold">Welcome back</DialogTitle>
+          <DialogDescription>Sign in to your account</DialogDescription>
+        </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">Email</label>
@@ -66,14 +72,14 @@ const Login = memo(() => {
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-background border-t-transparent"></span> : 'Sign in'}
             </Button>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
               </div>
             </div>
             <Button type="button" variant="outline" className="w-full">
@@ -86,15 +92,14 @@ const Login = memo(() => {
               Continue with Google
             </Button>
           </form>
-          <div className="mt-4 text-center text-sm">
-            Don't have an account?{' '}
-            <a href="/register" className="text-primary hover:underline">
-              Sign up
-            </a>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+        <div className="text-center text-sm">
+          Don't have an account?{' '}
+          <button onClick={onSwitchToRegister} className="text-primary hover:underline">
+            Sign up
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 });
 

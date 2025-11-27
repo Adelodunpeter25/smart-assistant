@@ -3,10 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Eye, EyeOff } from 'lucide-react';
 
-const Register = memo(() => {
+interface RegisterProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSwitchToLogin: () => void;
+}
+
+const Register = memo(({ open, onOpenChange, onSwitchToLogin }: RegisterProps) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,6 +24,7 @@ const Register = memo(() => {
     e.preventDefault();
     try {
       await register({ name, email, password });
+      onOpenChange(false);
       navigate('/');
     } catch (err) {
       console.error('Registration failed:', err);
@@ -25,13 +32,12 @@ const Register = memo(() => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 liquid-gradient">
-      <Card glass className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Create account</CardTitle>
-          <CardDescription>Get started with your smart assistant</CardDescription>
-        </CardHeader>
-        <CardContent>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold">Create account</DialogTitle>
+          <DialogDescription>Get started with your smart assistant</DialogDescription>
+        </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium">Name</label>
@@ -79,14 +85,14 @@ const Register = memo(() => {
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Creating account...' : 'Create account'}
+              {loading ? <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-background border-t-transparent"></span> : 'Create account'}
             </Button>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
               </div>
             </div>
             <Button type="button" variant="outline" className="w-full">
@@ -99,15 +105,14 @@ const Register = memo(() => {
               Continue with Google
             </Button>
           </form>
-          <div className="mt-4 text-center text-sm">
-            Already have an account?{' '}
-            <a href="/login" className="text-primary hover:underline">
-              Sign in
-            </a>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+        <div className="text-center text-sm">
+          Already have an account?{' '}
+          <button onClick={onSwitchToLogin} className="text-primary hover:underline">
+            Sign in
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 });
 

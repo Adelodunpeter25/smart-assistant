@@ -19,13 +19,11 @@ export const Hero = memo(() => {
           Automate tasks, manage your schedule, and boost productivity with intelligent conversation and seamless integrations.
         </p>
         <div className="flex gap-4 justify-center">
-          <Button size="lg" asChild>
-            <a href="/register">
-              Get Started <ArrowRight className="ml-2" size={18} />
-            </a>
+          <Button size="lg" onClick={() => window.dispatchEvent(new Event('openRegister'))}>
+            Get Started <ArrowRight className="ml-2" size={18} />
           </Button>
-          <Button size="lg" variant="outline" asChild>
-            <a href="/login">Sign In</a>
+          <Button size="lg" variant="outline" onClick={() => window.dispatchEvent(new Event('openLogin'))}>
+            Sign In
           </Button>
         </div>
       </div>

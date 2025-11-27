@@ -28,11 +28,11 @@ export const Header = memo(() => {
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           <div className="hidden md:flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
-              <a href="/login">Sign In</a>
+            <Button variant="ghost" size="sm" onClick={() => window.dispatchEvent(new Event('openLogin'))}>
+              Sign In
             </Button>
-            <Button size="sm" asChild>
-              <a href="/register">Get Started</a>
+            <Button size="sm" onClick={() => window.dispatchEvent(new Event('openRegister'))}>
+              Get Started
             </Button>
           </div>
           <MobileSidebar />

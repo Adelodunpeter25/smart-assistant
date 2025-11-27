@@ -24,14 +24,14 @@ export const ContactForm = memo(() => {
 
   return (
     <section className="min-h-screen py-24 px-4 liquid-gradient">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="text-center space-y-4 mb-12">
           <h1 className="text-4xl md:text-5xl font-bold">Get in Touch</h1>
           <p className="text-xl text-muted-foreground">We'd love to hear from you</p>
         </div>
 
-        <div className="grid md:grid-cols-5 gap-8">
-          <Card glass className="md:col-span-3">
+        <div className="grid md:grid-cols-2 gap-8">
+          <Card glass>
             <CardHeader>
               <CardTitle>Send us a message</CardTitle>
               <CardDescription>Fill out the form and we'll respond within 24 hours</CardDescription>
@@ -72,14 +72,17 @@ export const ContactForm = memo(() => {
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading && <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent"></span>}
-                  {loading ? 'Sending...' : 'Send Message'}
+                  {loading ? (
+                    <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-background border-t-transparent"></span>
+                  ) : (
+                    'Send Message'
+                  )}
                 </Button>
               </form>
             </CardContent>
           </Card>
 
-          <div className="space-y-6 md:col-span-2">
+          <div className="space-y-6 md:col-span-1">
             <Card glass>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
