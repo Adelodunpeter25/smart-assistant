@@ -1,4 +1,4 @@
-.PHONY: install dev db-up db-down db-reset run test clean
+.PHONY: install dev db-up db-down db-reset migrate-init migrate-make migrate migrate-status migrate-history run test clean
 
 install:
 	cd backend && uv sync
@@ -15,6 +15,21 @@ db-down:
 db-reset:
 	docker-compose down -v
 	docker-compose up -d
+
+migrate-init:
+	cd backend && uv run migrator init
+
+migrate-make:
+	cd backend && uv run migrator makemigrations "$(msg)"
+
+migrate:
+	cd backend && uv run migrator migrate
+
+migrate-status:
+	cd backend && uv run migrator status
+
+migrate-history:
+	cd backend && uv run migrator history
 
 run:
 	cd backend && uv run uvicorn main:app --reload --port 8000

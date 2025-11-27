@@ -1,6 +1,7 @@
 # Project specific
 .amazonq/
 implementation.md
+MIGRATOR_FEEDBACK.md
 
 # Python
 __pycache__/
