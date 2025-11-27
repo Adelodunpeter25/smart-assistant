@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.services.email import EmailService
-from app.schemas import EmailSend, EmailLogResponse, SuccessResponse
+from app.schemas import EmailSend, EmailLogResponse, EmailDraftRequest, EmailDraftResponse, SuccessResponse
 
 router = APIRouter(prefix="/email", tags=["Email"])
 
@@ -18,6 +18,15 @@ async def send_email(
     email_log = await EmailService.send_email(db, email_data)
     message = "Email sent successfully" if email_log.status == "sent" else "Email failed to send"
     return SuccessResponse(data=email_log, message=message)
+
+
+@router.post("/draft", response_model=SuccessResponse[EmailDraftResponse])
+async def draft_email(
+    draft_request: EmailDraftRequest,
+):
+    """Generate email draft."""
+    draft = EmailService.draft_email(draft_request.context, draft_request.tone)
+    return SuccessResponse(data=draft, message="Email draft generated")
 
 
 @router.get("/logs", response_model=SuccessResponse[list[EmailLogResponse]])

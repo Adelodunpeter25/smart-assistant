@@ -45,3 +45,11 @@ class EmailService:
         query = select(EmailLog).order_by(EmailLog.sent_at.desc()).offset(skip).limit(limit)
         result = await db.execute(query)
         return list(result.scalars().all())
+
+    @staticmethod
+    def draft_email(context: str, tone: str = "professional") -> dict:
+        """Generate email draft based on context."""
+        # Simple template-based drafting (will be replaced with LLM later)
+        subject = f"Regarding: {context[:50]}"
+        body = f"<p>Dear recipient,</p><p>{context}</p><p>Best regards</p>"
+        return {"subject": subject, "body": body}
