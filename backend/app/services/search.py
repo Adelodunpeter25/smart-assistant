@@ -12,9 +12,12 @@ class SearchService:
         """Search the web using DuckDuckGo HTML."""
         url = "https://html.duckduckgo.com/html/"
         params = {"q": query}
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+        }
         
         async with httpx.AsyncClient() as client:
-            response = await client.post(url, data=params, follow_redirects=True)
+            response = await client.post(url, data=params, headers=headers, follow_redirects=True)
             soup = BeautifulSoup(response.text, "html.parser")
             
             results = []
