@@ -3,7 +3,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useTimers } from '@/hooks';
 import { Plus, Trash2, Clock } from 'lucide-react';
@@ -96,6 +96,7 @@ const Timers = memo(() => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create Timer</DialogTitle>
+            <DialogDescription>Set a new timer</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4">
             <div>

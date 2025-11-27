@@ -3,7 +3,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useNotes } from '@/hooks';
 import { Plus, Trash2, StickyNote } from 'lucide-react';
@@ -93,6 +93,7 @@ const Notes = memo(() => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create Note</DialogTitle>
+            <DialogDescription>Add a new note</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4">
             <div>

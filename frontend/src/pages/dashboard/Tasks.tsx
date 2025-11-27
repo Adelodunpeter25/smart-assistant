@@ -100,6 +100,7 @@ const Tasks = memo(() => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create Task</DialogTitle>
+            <DialogDescription>Add a new task to your list</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4">
             <div>

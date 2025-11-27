@@ -3,7 +3,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useCalendar } from '@/hooks';
 import { Plus, Trash2, Calendar as CalendarIcon } from 'lucide-react';
@@ -105,6 +105,7 @@ const Calendar = memo(() => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create Event</DialogTitle>
+            <DialogDescription>Add a new event to your calendar</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4">
             <div>
