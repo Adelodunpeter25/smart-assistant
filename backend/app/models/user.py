@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 
@@ -17,6 +18,12 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    tasks = relationship("Task", back_populates="user", cascade="all, delete-orphan")
+    notes = relationship("Note", back_populates="user", cascade="all, delete-orphan")
+    calendar_events = relationship("CalendarEvent", back_populates="user", cascade="all, delete-orphan")
+    refresh_tokens = relationship("RefreshToken", back_populates="user", cascade="all, delete-orphan")
 
 
 class RefreshToken(Base):
@@ -30,3 +37,6 @@ class RefreshToken(Base):
     expires_at = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     is_revoked = Column(Boolean, default=False)
+    
+    # Relationships
+    user = relationship("User", back_populates="refresh_tokens")

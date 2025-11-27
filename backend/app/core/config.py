@@ -34,6 +34,12 @@ class Settings(BaseSettings):
     LLM_MODEL: str = "gpt-4"
     LLM_TEMPERATURE: float = 0.7
     LLM_MAX_TOKENS: int = 500
+    
+    # JWT Settings
+    JWT_SECRET_KEY: str = "your-secret-key-change-in-production"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     # Rate Limiting
     RATE_LIMIT_PER_MINUTE: int = 10
