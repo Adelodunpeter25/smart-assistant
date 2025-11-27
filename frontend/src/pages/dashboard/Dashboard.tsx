@@ -1,14 +1,18 @@
 import { memo } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { MessageSquare, CheckSquare, Calendar, Clock } from 'lucide-react';
+import { StickyNote, CheckSquare, Calendar, Clock } from 'lucide-react';
+import { useOverview } from '@/hooks';
+import { Link } from 'react-router-dom';
 
 const Dashboard = memo(() => {
+  const { tasks, events, timers, notes, loading } = useOverview();
+
   const stats = [
-    { icon: MessageSquare, label: 'Chat Messages', value: '0', color: 'text-blue-500' },
-    { icon: CheckSquare, label: 'Tasks', value: '0', color: 'text-green-500' },
-    { icon: Calendar, label: 'Events', value: '0', color: 'text-purple-500' },
-    { icon: Clock, label: 'Active Timers', value: '0', color: 'text-orange-500' },
+    { icon: StickyNote, label: 'Notes', value: loading ? '...' : notes.toString(), color: 'text-blue-500' },
+    { icon: CheckSquare, label: 'Tasks', value: loading ? '...' : tasks.toString(), color: 'text-green-500' },
+    { icon: Calendar, label: 'Events', value: loading ? '...' : events.toString(), color: 'text-purple-500' },
+    { icon: Clock, label: 'Active Timers', value: loading ? '...' : timers.toString(), color: 'text-orange-500' },
   ];
 
   return (
@@ -50,14 +54,10 @@ const Dashboard = memo(() => {
               <CardDescription>Get started with your assistant</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <a href="/dashboard/chat" className="block p-3 rounded-lg hover:bg-accent transition-colors">
+              <Link to="/dashboard/chat" className="block p-3 rounded-lg hover:bg-accent transition-colors">
                 <p className="font-medium">Start a conversation</p>
                 <p className="text-sm text-muted-foreground">Chat with your AI assistant</p>
-              </a>
-              <a href="/dashboard/tasks" className="block p-3 rounded-lg hover:bg-accent transition-colors">
-                <p className="font-medium">Create a task</p>
-                <p className="text-sm text-muted-foreground">Add a new task to your list</p>
-              </a>
+              </Link>
             </CardContent>
           </Card>
         </div>
