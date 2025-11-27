@@ -10,6 +10,7 @@ const Landing = lazy(() => import('@/pages/landing/Landing'));
 const About = lazy(() => import('@/pages/public/About'));
 const Contact = lazy(() => import('@/pages/public/Contact'));
 const Dashboard = lazy(() => import('@/pages/dashboard/Dashboard'));
+const Chat = lazy(() => import('@/pages/dashboard/Chat'));
 const NotFound = lazy(() => import('@/pages/public/NotFound'));
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/dashboard/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
