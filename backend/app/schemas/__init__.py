@@ -12,6 +12,12 @@ from app.schemas.search import (
     SummarizeRequest,
     SummarizeResponse,
 )
+from app.schemas.calculator import (
+    CalculateRequest,
+    CalculateResponse,
+    ConvertCurrencyRequest,
+    ConvertCurrencyResponse,
+)
 from app.schemas.response import SuccessResponse, ErrorResponse
 
 __all__ = [
@@ -31,6 +37,10 @@ __all__ = [
     "SearchResult",
     "SummarizeRequest",
     "SummarizeResponse",
+    "CalculateRequest",
+    "CalculateResponse",
+    "ConvertCurrencyRequest",
+    "ConvertCurrencyResponse",
     "SuccessResponse",
     "ErrorResponse",
 ]

@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     # API Keys
     OPENAI_API_KEY: str = ""
     ANTHROPIC_API_KEY: str = ""
+    EXCHANGERATE_API_KEY: str = ""
 
     # Email Configuration (Resend)
     RESEND_API_KEY: str = ""
