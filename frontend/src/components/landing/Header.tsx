@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts';
 import { Moon, Sun } from 'lucide-react';
-import { MobileSidebar } from '@/components/MobileSidebar';
+import { MobileSidebar } from '@/components/layout/MobileSidebar';
 
 export const Header = memo(() => {
   const { theme, toggleTheme } = useTheme();

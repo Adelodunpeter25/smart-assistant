@@ -24,7 +24,7 @@ const Login = memo(({ open, onOpenChange, onSwitchToRegister }: LoginProps) => {
     try {
       await login({ email, password });
       onOpenChange(false);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       console.error('Login failed:', err);
     }

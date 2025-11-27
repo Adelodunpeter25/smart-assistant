@@ -1,15 +1,16 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useAuth } from '@/hooks';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
 import Login from '@/pages/auth/Login';
 import Register from '@/pages/auth/Register';
 import ForgotPassword from '@/pages/auth/ForgotPassword';
 
 const Landing = lazy(() => import('@/pages/landing/Landing'));
-const About = lazy(() => import('@/pages/About'));
-const Contact = lazy(() => import('@/pages/Contact'));
-const NotFound = lazy(() => import('@/pages/NotFound'));
+const About = lazy(() => import('@/pages/public/About'));
+const Contact = lazy(() => import('@/pages/public/Contact'));
+const Dashboard = lazy(() => import('@/pages/dashboard/Dashboard'));
+const NotFound = lazy(() => import('@/pages/public/NotFound'));
 
 function App() {
   const { initAuth } = useAuth();
@@ -44,6 +45,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

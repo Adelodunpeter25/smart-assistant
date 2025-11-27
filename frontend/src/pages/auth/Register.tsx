@@ -25,7 +25,7 @@ const Register = memo(({ open, onOpenChange, onSwitchToLogin }: RegisterProps) =
     try {
       await register({ name, email, password });
       onOpenChange(false);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       console.error('Registration failed:', err);
     }
