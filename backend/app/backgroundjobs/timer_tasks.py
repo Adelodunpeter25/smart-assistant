@@ -41,6 +41,14 @@ def check_timers():
             db.add(notification)
             db.commit()
             
+            # Send WebSocket notification
+            from app.websockets.manager import manager
+            import asyncio
+            try:
+                asyncio.create_task(manager.send_notification(timer.user_id, notification_msg))
+            except Exception as e:
+                logger.error(f"Failed to send WebSocket notification: {e}")
+            
             logger.info(f"Timer {timer.id} triggered for user {timer.user_id}: {notification_msg}")
         
         if timers:
