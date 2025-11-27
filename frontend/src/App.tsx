@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { useAuth } from '@/hooks';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 
+const Landing = lazy(() => import('@/pages/landing/Landing'));
 const Login = lazy(() => import('@/pages/auth/Login'));
 const Register = lazy(() => import('@/pages/auth/Register'));
 
@@ -17,6 +18,7 @@ function App() {
     <BrowserRouter>
       <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
         <Routes>
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
