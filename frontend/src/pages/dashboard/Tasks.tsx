@@ -4,12 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useTasks } from '@/hooks';
 import { Plus, Trash2, Check } from 'lucide-react';
 
 const Tasks = memo(() => {
   const { tasks, loading, getTasks, createTask, deleteTask, completeTask } = useTasks();
   const [open, setOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -63,7 +66,7 @@ const Tasks = memo(() => {
                           <Check className="w-4 h-4" />
                         </Button>
                       )}
-                      <Button size="sm" variant="ghost" onClick={() => deleteTask(task.id)}>
+                      <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => { setDeleteId(task.id); setConfirmOpen(true); }}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
@@ -97,6 +100,14 @@ const Tasks = memo(() => {
           </form>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        onConfirm={() => deleteId && deleteTask(deleteId)}
+        title="Delete Task"
+        description="Are you sure you want to delete this task? This action cannot be undone."
+      />
     </DashboardLayout>
   );
 });

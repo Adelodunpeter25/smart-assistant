@@ -4,12 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useCalendar } from '@/hooks';
 import { Plus, Trash2 } from 'lucide-react';
 
 const Calendar = memo(() => {
   const { events, loading, getEvents, createEvent, deleteEvent } = useCalendar();
   const [open, setOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -69,7 +72,7 @@ const Calendar = memo(() => {
                         {new Date(event.start_time).toLocaleString()}
                       </p>
                     </div>
-                    <Button size="sm" variant="ghost" onClick={() => deleteEvent(event.id)}>
+                    <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => { setDeleteId(event.id); setConfirmOpen(true); }}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -113,6 +116,14 @@ const Calendar = memo(() => {
           </form>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        onConfirm={() => deleteId && deleteEvent(deleteId)}
+        title="Delete Event"
+        description="Are you sure you want to delete this event? This action cannot be undone."
+      />
     </DashboardLayout>
   );
 });

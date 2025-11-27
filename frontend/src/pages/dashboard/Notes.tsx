@@ -4,12 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useNotes } from '@/hooks';
 import { Plus, Trash2 } from 'lucide-react';
 
 const Notes = memo(() => {
   const { notes, loading, getNotes, createNote, deleteNote } = useNotes();
   const [open, setOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
 
@@ -57,7 +60,7 @@ const Notes = memo(() => {
                       <p className="whitespace-pre-wrap">{note.content}</p>
                       {note.tags && <p className="text-sm text-muted-foreground mt-1">{note.tags}</p>}
                     </div>
-                    <Button size="sm" variant="ghost" onClick={() => deleteNote(note.id)}>
+                    <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => { setDeleteId(note.id); setConfirmOpen(true); }}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -91,6 +94,14 @@ const Notes = memo(() => {
           </form>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        onConfirm={() => deleteId && deleteNote(deleteId)}
+        title="Delete Note"
+        description="Are you sure you want to delete this note? This action cannot be undone."
+      />
     </DashboardLayout>
   );
 });

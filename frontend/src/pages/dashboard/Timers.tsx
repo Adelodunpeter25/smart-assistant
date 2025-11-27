@@ -4,12 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useTimers } from '@/hooks';
 import { Plus, Trash2 } from 'lucide-react';
 
 const Timers = memo(() => {
   const { timers, loading, getTimers, createTimer, cancelTimer } = useTimers();
   const [open, setOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [duration, setDuration] = useState('');
   const [label, setLabel] = useState('');
 
@@ -61,7 +64,7 @@ const Timers = memo(() => {
                       <p className="text-sm text-muted-foreground">Status: {timer.status}</p>
                     </div>
                     {timer.status === 'active' && (
-                      <Button size="sm" variant="ghost" onClick={() => cancelTimer(timer.id)}>
+                      <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => { setDeleteId(timer.id); setConfirmOpen(true); }}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     )}
@@ -96,6 +99,14 @@ const Timers = memo(() => {
           </form>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        onConfirm={() => deleteId && cancelTimer(deleteId)}
+        title="Cancel Timer"
+        description="Are you sure you want to cancel this timer?"
+      />
     </DashboardLayout>
   );
 });
