@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { api } from '@/services/api';
-import type { CalendarEvent, CreateCalendarEventRequest, ApiResponse } from '@/types';
+import type { CalendarEvent, CalendarEventCreate, ApiResponse } from '@/types';
 
 export function useCalendar() {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -23,7 +23,7 @@ export function useCalendar() {
     }
   };
 
-  const createEvent = async (data: CreateCalendarEventRequest) => {
+  const createEvent = async (data: CalendarEventCreate) => {
     setLoading(true);
     setError(null);
     try {

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { api } from '@/services/api';
-import type { ChatMessage, ChatRequest, ChatResponse } from '@/types';
+import type { Message, ChatRequest, ChatResponse } from '@/types';
 
 export function useChat() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

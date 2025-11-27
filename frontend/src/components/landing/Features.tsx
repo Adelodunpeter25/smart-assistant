@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MessageSquare, Calendar, CheckSquare, Clock, Mail, Search } from 'lucide-react';
 
 const features = [
