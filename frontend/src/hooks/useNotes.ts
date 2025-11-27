@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { api } from '@/services/api';
-import type { Note, CreateNoteRequest, UpdateNoteRequest, ApiResponse } from '@/types';
+import type { Note, NoteCreate, NoteUpdate, ApiResponse } from '@/types';
 
 export function useNotes() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -23,7 +23,7 @@ export function useNotes() {
     }
   };
 
-  const createNote = async (data: CreateNoteRequest) => {
+  const createNote = async (data: NoteCreate) => {
     setLoading(true);
     setError(null);
     try {
@@ -39,7 +39,7 @@ export function useNotes() {
     }
   };
 
-  const updateNote = async (id: number, data: UpdateNoteRequest) => {
+  const updateNote = async (id: number, data: NoteUpdate) => {
     setLoading(true);
     setError(null);
     try {

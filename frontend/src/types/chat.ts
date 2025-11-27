@@ -10,6 +10,7 @@ export interface ChatResponse {
     data?: any
     error?: string
   }
+  tool_calls?: any
 }
 
 export interface Message {
