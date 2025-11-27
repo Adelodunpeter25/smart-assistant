@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import Login from '@/pages/auth/Login';
 import Register from '@/pages/auth/Register';
+import ForgotPassword from '@/pages/auth/ForgotPassword';
 
 const Landing = lazy(() => import('@/pages/landing/Landing'));
 const About = lazy(() => import('@/pages/About'));
@@ -14,6 +15,7 @@ function App() {
   const { initAuth } = useAuth();
   const [loginOpen, setLoginOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
 
   useEffect(() => {
     initAuth();
@@ -22,13 +24,16 @@ function App() {
   useEffect(() => {
     const handleOpenLogin = () => setLoginOpen(true);
     const handleOpenRegister = () => setRegisterOpen(true);
+    const handleOpenForgotPassword = () => setForgotPasswordOpen(true);
     
     window.addEventListener('openLogin', handleOpenLogin);
     window.addEventListener('openRegister', handleOpenRegister);
+    window.addEventListener('openForgotPassword', handleOpenForgotPassword);
     
     return () => {
       window.removeEventListener('openLogin', handleOpenLogin);
       window.removeEventListener('openRegister', handleOpenRegister);
+      window.removeEventListener('openForgotPassword', handleOpenForgotPassword);
     };
   }, []);
 
@@ -55,6 +60,14 @@ function App() {
         onOpenChange={setRegisterOpen}
         onSwitchToLogin={() => {
           setRegisterOpen(false);
+          setLoginOpen(true);
+        }}
+      />
+      <ForgotPassword
+        open={forgotPasswordOpen}
+        onOpenChange={setForgotPasswordOpen}
+        onBackToLogin={() => {
+          setForgotPasswordOpen(false);
           setLoginOpen(true);
         }}
       />

@@ -71,6 +71,18 @@ const Login = memo(({ open, onOpenChange, onSwitchToRegister }: LoginProps) => {
               </div>
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={() => {
+                  onOpenChange(false);
+                  window.dispatchEvent(new Event('openForgotPassword'));
+                }}
+                className="text-sm text-primary hover:underline"
+              >
+                Forgot password?
+              </button>
+            </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-background border-t-transparent"></span> : 'Sign in'}
             </Button>
