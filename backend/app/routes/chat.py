@@ -3,7 +3,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
-from app.services.llm import LLMService
+from app.services.groq import GroqService
 from app.services.tool_executor import ToolExecutor
 from app.schemas import ChatRequest, ChatResponse
 
@@ -18,7 +18,7 @@ async def chat(
     """Process chat message and execute tools if needed."""
     
     # Get LLM response with tool call
-    llm_result = LLMService.process_message(chat_request.message)
+    llm_result = GroqService.process_message(chat_request.message)
     
     # If LLM wants to use a tool, execute it
     if llm_result.get("tool_name"):
@@ -30,7 +30,7 @@ async def chat(
         
         # Generate natural response using LLM
         if tool_result["success"]:
-            llm_response = LLMService.process_message(chat_request.message, tool_result)
+            llm_response = GroqService.process_message(chat_request.message, tool_result)
             response = llm_response["response"]
         else:
             response = f"Sorry, I couldn't complete that: {tool_result.get('error')}"

@@ -1,4 +1,4 @@
-"""LLM service for natural language processing."""
+"""Groq service for natural language processing."""
 
 import json
 from groq import Groq
@@ -10,8 +10,8 @@ settings = get_settings()
 client = Groq(api_key=settings.GROQ_API_KEY)
 
 
-class LLMService:
-    """Service for LLM operations."""
+class GroqService:
+    """Service for Groq LLM operations."""
 
     @staticmethod
     def process_message(user_message: str, tool_result: dict | None = None) -> dict:
