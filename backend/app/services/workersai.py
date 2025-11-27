@@ -22,7 +22,7 @@ class WorkersAIService:
             
             async with httpx.AsyncClient() as client:
                 response = await client.post(
-                    f"https://api.cloudflare.com/client/v4/accounts/{settings.CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/meta/llama-3.1-8b-instruct",
+                    f"https://api.cloudflare.com/client/v4/accounts/{settings.CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
                     headers={
                         "Authorization": f"Bearer {settings.CLOUDFLARE_API_TOKEN}",
                         "Content-Type": "application/json",
@@ -55,7 +55,7 @@ class WorkersAIService:
         
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                f"https://api.cloudflare.com/client/v4/accounts/{settings.CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/meta/llama-3.1-8b-instruct",
+                f"https://api.cloudflare.com/client/v4/accounts/{settings.CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
                 headers={
                     "Authorization": f"Bearer {settings.CLOUDFLARE_API_TOKEN}",
                     "Content-Type": "application/json",
