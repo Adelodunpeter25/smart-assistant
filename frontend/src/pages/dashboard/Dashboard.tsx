@@ -13,10 +13,10 @@ const Dashboard = memo(() => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div>
           <h2 className="text-3xl font-bold">Welcome back!</h2>
-          <p className="text-muted-foreground">Here's what's happening with your assistant today.</p>
+          <p className="text-muted-foreground mt-2">Here's what's happening with your assistant today.</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
