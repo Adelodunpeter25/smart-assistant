@@ -5,7 +5,7 @@ import { useAuthStore } from '@/stores';
 import type { LoginRequest, RegisterRequest, TokenResponse, User } from '@/types';
 
 export function useAuth() {
-  const { user, setUser, logout: clearUser } = useAuthStore();
+  const { user, setUser, setInitialized, logout: clearUser } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -83,6 +83,7 @@ export function useAuth() {
         localStorage.removeItem('refresh_token');
       }
     }
+    setInitialized(true);
   };
 
   return { user, loading, error, register, login, logout, getMe, initAuth };

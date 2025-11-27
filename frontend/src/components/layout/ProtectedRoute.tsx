@@ -7,7 +7,12 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = memo(({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, isInitialized } = useAuthStore();
+  
+  if (!isInitialized) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+  
   return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
 });
 
