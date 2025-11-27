@@ -1,7 +1,7 @@
 """Email log models."""
 
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Text, DateTime, Enum
+from sqlalchemy import Column, Integer, String, Text, DateTime, Enum, ForeignKey
 import enum
 from app.core.database import Base
 
@@ -18,6 +18,7 @@ class EmailLog(Base):
     __tablename__ = "email_logs"
     
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
     recipient = Column(String(255), nullable=False)
     subject = Column(String(500), nullable=False)
     body = Column(Text, nullable=False)

@@ -1,7 +1,8 @@
 """Task models."""
 
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, Enum, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Enum, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
 import enum
 from app.core.database import Base
 
@@ -26,6 +27,7 @@ class Task(Base):
     __tablename__ = "tasks"
     
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     title = Column(String(500), nullable=False)
     description = Column(String(2000), nullable=True)
     priority = Column(Enum(TaskPriority), default=TaskPriority.MEDIUM)
@@ -33,3 +35,5 @@ class Task(Base):
     due_date = Column(DateTime, nullable=True)
     completed_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+    
+    user = relationship("User", back_populates="tasks")
