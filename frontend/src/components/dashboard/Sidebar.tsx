@@ -20,13 +20,13 @@ export const Sidebar = memo(() => {
   ];
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 glass border-r flex flex-col">
-      <div className="p-6 border-b">
+    <aside className="hidden md:flex fixed left-0 top-0 h-full w-64 glass border-r flex-col">
+      <a href="/" className="p-6 border-b">
         <div className="flex items-center gap-2">
           <img src="/icon.svg" alt="Smart Assistant" className="w-8 h-8" />
           <span className="font-bold text-lg">Smart Assistant</span>
         </div>
-      </div>
+      </a>
 
       <nav className="flex-1 p-4 space-y-2">
         {navItems.map((item) => (

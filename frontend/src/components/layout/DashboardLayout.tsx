@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Sidebar, TopBar } from '@/components/dashboard';
+import { Sidebar, TopBar, BottomBar } from '@/components/dashboard';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -10,9 +10,10 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
     <div className="min-h-screen bg-background">
       <Sidebar />
       <TopBar />
-      <main className="ml-64 pt-16 p-6">
+      <main className="md:ml-64 pt-16 pb-20 md:pb-6 p-6">
         {children}
       </main>
+      <BottomBar />
     </div>
   );
 });
