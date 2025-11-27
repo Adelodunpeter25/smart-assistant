@@ -1,9 +1,15 @@
 import { memo, useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Menu, X, LayoutDashboard, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuthStore } from '@/stores';
+import { useAuth } from '@/hooks';
 
 export const MobileSidebar = memo(() => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isAuthenticated } = useAuthStore();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -43,12 +49,38 @@ export const MobileSidebar = memo(() => {
                 Contact
               </a>
               <div className="pt-4 space-y-2">
-                <Button variant="ghost" size="sm" className="w-full" onClick={() => { setIsOpen(false); window.dispatchEvent(new Event('openLogin')); }}>
-                  Sign In
-                </Button>
-                <Button size="sm" className="w-full" onClick={() => { setIsOpen(false); window.dispatchEvent(new Event('openRegister')); }}>
-                  Get Started
-                </Button>
+                {isAuthenticated ? (
+                  <>
+                    <div className="px-4 py-3 border rounded-lg mb-2">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold">
+                          {user?.name?.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{user?.name}</p>
+                          <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); navigate('/dashboard'); }}>
+                      <LayoutDashboard className="mr-2" size={18} />
+                      Dashboard
+                    </Button>
+                    <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); logout(); }}>
+                      <LogOut className="mr-2" size={18} />
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="ghost" size="sm" className="w-full" onClick={() => { setIsOpen(false); window.dispatchEvent(new Event('openLogin')); }}>
+                      Sign In
+                    </Button>
+                    <Button size="sm" className="w-full" onClick={() => { setIsOpen(false); window.dispatchEvent(new Event('openRegister')); }}>
+                      Get Started
+                    </Button>
+                  </>
+                )}
               </div>
             </nav>
           </div>
