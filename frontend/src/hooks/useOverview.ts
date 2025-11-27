@@ -28,11 +28,16 @@ export const useOverview = (): OverviewStats => {
           api.get('/notes'),
         ]);
 
+        const tasksData = Array.isArray(tasksRes.data.data) ? tasksRes.data.data : [];
+        const eventsData = Array.isArray(eventsRes.data.data) ? eventsRes.data.data : [];
+        const timersData = Array.isArray(timersRes.data.data) ? timersRes.data.data : [];
+        const notesData = Array.isArray(notesRes.data.data) ? notesRes.data.data : [];
+
         setStats({
-          tasks: tasksRes.data.data?.length || 0,
-          events: eventsRes.data.data?.length || 0,
-          timers: timersRes.data.data?.filter((t: any) => t.status === 'active').length || 0,
-          notes: notesRes.data.data?.length || 0,
+          tasks: tasksData.length,
+          events: eventsData.length,
+          timers: timersData.filter((t: any) => t.status === 'active').length,
+          notes: notesData.length,
           loading: false,
         });
       } catch (error) {
