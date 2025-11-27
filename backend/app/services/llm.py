@@ -3,6 +3,7 @@
 import json
 from groq import Groq
 from app.core.config import get_settings
+from app.utils.prompts import SYSTEM_PROMPT
 
 settings = get_settings()
 client = Groq(api_key=settings.GROQ_API_KEY)
@@ -115,10 +116,7 @@ class LLMService:
         response = client.chat.completions.create(
             model="llama-3.1-70b-versatile",
             messages=[
-                {
-                    "role": "system",
-                    "content": "You are a helpful assistant that can use tools to help users. Extract the user's intent and call the appropriate tool.",
-                },
+                {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": user_message},
             ],
             tools=TOOLS,
