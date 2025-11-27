@@ -241,4 +241,61 @@ TOOLS = [
             },
         },
     },
+    # Timer tools
+    {
+        "type": "function",
+        "function": {
+            "name": "set_timer",
+            "description": "Set a countdown timer for a specific duration. Timer will trigger after the specified time.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "duration_seconds": {"type": "integer", "description": "Duration in seconds. Examples: 60 (1 min), 600 (10 min), 3600 (1 hour)"},
+                    "label": {"type": "string", "description": "Optional label for the timer"},
+                },
+                "required": ["duration_seconds"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "set_alarm",
+            "description": "Set an alarm for a specific time. Alarm will trigger at the exact time specified.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "trigger_time": {"type": "string", "description": "Time when alarm should trigger in ISO format (YYYY-MM-DDTHH:MM:SS)"},
+                    "label": {"type": "string", "description": "Optional label for the alarm"},
+                },
+                "required": ["trigger_time"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "list_timers",
+            "description": "List all active timers and alarms",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "cancel_timer",
+            "description": "Cancel a timer or alarm by ID",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "timer_id": {"type": "integer", "description": "Timer ID"},
+                },
+                "required": ["timer_id"],
+            },
+        },
+    },
 ]

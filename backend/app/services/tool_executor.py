@@ -8,6 +8,7 @@ from app.services.note import NoteService
 from app.services.email import EmailService
 from app.services.search import SearchService
 from app.services.calculator import CalculatorService
+from app.services.timer import TimerService
 from app.schemas import (
     TaskCreate,
     CalendarEventCreate,
@@ -119,6 +120,30 @@ class ToolExecutor:
             to_currency = parameters.get("to_currency")
             result = await CalculatorService.convert_currency(amount, from_currency, to_currency)
             return {"success": True, "data": result}
+
+        # Timer tools
+        elif tool_name == "set_timer":
+            duration_seconds = parameters.get("duration_seconds")
+            label = parameters.get("label")
+            timer = await TimerService.create_timer(db, duration_seconds, user_id, label)
+            return {"success": True, "data": {"id": timer.id, "duration_seconds": timer.duration_seconds, "trigger_time": str(timer.trigger_time)}}
+        
+        elif tool_name == "set_alarm":
+            trigger_time = datetime.fromisoformat(parameters.get("trigger_time"))
+            label = parameters.get("label")
+            timer = await TimerService.create_alarm(db, trigger_time, user_id, label)
+            return {"success": True, "data": {"id": timer.id, "trigger_time": str(timer.trigger_time)}}
+        
+        elif tool_name == "list_timers":
+            timers = await TimerService.get_timers(db, user_id)
+            return {"success": True, "data": {"timers": [{"id": t.id, "type": t.type.value, "trigger_time": str(t.trigger_time), "status": t.status.value} for t in timers]}}
+        
+        elif tool_name == "cancel_timer":
+            timer_id = parameters.get("timer_id")
+            timer = await TimerService.cancel_timer(db, timer_id, user_id)
+            if not timer:
+                return {"success": False, "error": "Timer not found"}
+            return {"success": True, "data": {"message": "Timer cancelled"}}
 
         else:
             return {"success": False, "error": f"Unknown tool: {tool_name}"}
