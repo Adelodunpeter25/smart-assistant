@@ -40,7 +40,7 @@ class GroqService:
             ],
             tools=TOOLS,
             tool_choice="auto",
-            temperature=0.9,
+            temperature=0.3,
             max_tokens=500,
         )
 

@@ -10,10 +10,10 @@ TOOLS = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "title": {"type": "string", "description": "Task title"},
-                    "description": {"type": "string", "description": "Task description"},
-                    "priority": {"type": "string", "enum": ["low", "medium", "high"]},
-                    "due_date": {"type": "string", "description": "Due date in ISO format"},
+                    "title": {"type": "string", "description": "Short task title (2-10 words)"},
+                    "description": {"type": "string", "description": "Optional detailed description"},
+                    "priority": {"type": "string", "enum": ["low", "medium", "high"], "description": "Task priority (default: medium)"},
+                    "due_date": {"type": "string", "description": "Due date in ISO format (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS)"},
                 },
                 "required": ["title"],
             },
@@ -37,11 +37,11 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "complete_task",
-            "description": "Mark a task as completed by ID or title",
+            "description": "Mark a task as completed. Requires task ID - if user provides task name, use list_tasks first to get the ID.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "task_id": {"type": "integer", "description": "Task ID"},
+                    "task_id": {"type": "integer", "description": "Task ID (must be integer)"},
                 },
                 "required": ["task_id"],
             },
@@ -187,12 +187,14 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "search_web",
-            "description": "Search the web",
+            "description": "Search the web for information. Keep queries simple and focused. Extract key search terms from user's question.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "query": {"type": "string", "description": "Search query"},
-                    "max_results": {"type": "integer", "description": "Max results (default 5)", "default": 5},
+                    "query": {
+                        "type": "string", 
+                        "description": "Simple search query with 2-5 keywords. Examples: 'Python tutorials', 'FastAPI authentication', 'asyncio vs threading'. Avoid full sentences or questions."
+                    },
                 },
                 "required": ["query"],
             },
@@ -203,11 +205,14 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "calculate",
-            "description": "Perform mathematical calculation",
+            "description": "Perform mathematical calculation. Use standard Python math operators: +, -, *, /, **, %, abs(), round(), min(), max()",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "expression": {"type": "string", "description": "Math expression"},
+                    "expression": {
+                        "type": "string", 
+                        "description": "Math expression as string. Examples: '25 * 48 + 100', '0.15 * 2500', 'round(123.456, 2)'. Convert percentages to decimals."
+                    },
                 },
                 "required": ["expression"],
             },
@@ -218,13 +223,19 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "convert_currency",
-            "description": "Convert currency using live exchange rates",
+            "description": "Convert currency using live exchange rates. Use 3-letter ISO currency codes.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "amount": {"type": "number", "description": "Amount to convert"},
-                    "from_currency": {"type": "string", "description": "Source currency code (e.g., USD, NGN, GBP)"},
-                    "to_currency": {"type": "string", "description": "Target currency code (e.g., USD, NGN, GBP)"},
+                    "amount": {"type": "number", "description": "Amount to convert (must be number)"},
+                    "from_currency": {
+                        "type": "string", 
+                        "description": "Source currency code (3 letters, uppercase). Common: USD, EUR, GBP, NGN, JPY, CAD, AUD"
+                    },
+                    "to_currency": {
+                        "type": "string", 
+                        "description": "Target currency code (3 letters, uppercase). Common: USD, EUR, GBP, NGN, JPY, CAD, AUD"
+                    },
                 },
                 "required": ["amount", "from_currency", "to_currency"],
             },
