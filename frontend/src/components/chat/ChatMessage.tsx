@@ -40,13 +40,13 @@ export const ChatMessage = memo(({ message }: ChatMessageProps) => {
         </div>
       )}
       <div className={`max-w-[70%] rounded-lg p-4 ${isUser ? 'bg-primary text-primary-foreground' : 'glass'}`}>
-        <div className="text-sm whitespace-pre-wrap">
+        <div className="text-sm whitespace-pre-wrap break-words overflow-wrap-anywhere">
           {messageParts.map((part, idx) => (
             part.type === 'link' ? (
               <Button
                 key={idx}
                 size="sm"
-                className="inline-flex items-center gap-1 mx-1 my-0.5 h-7 text-xs bg-primary text-primary-foreground hover:bg-primary/90"
+                className="inline-flex items-center gap-1 mx-1 my-0.5 h-7 text-xs bg-blue-500 text-white hover:bg-blue-600"
                 onClick={() => window.open(part.content, '_blank', 'noopener,noreferrer')}
               >
                 Visit <ExternalLink className="w-3 h-3" />
