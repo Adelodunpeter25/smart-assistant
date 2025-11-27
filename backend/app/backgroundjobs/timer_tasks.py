@@ -45,7 +45,10 @@ def check_timers():
             from app.websockets.manager import manager
             import asyncio
             try:
-                asyncio.create_task(manager.send_notification(timer.user_id, notification_msg))
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                loop.run_until_complete(manager.send_notification(timer.user_id, notification_msg))
+                loop.close()
             except Exception as e:
                 logger.error(f"Failed to send WebSocket notification: {e}")
             
@@ -53,6 +56,8 @@ def check_timers():
         
         if timers:
             logger.info(f"Processed {len(timers)} triggered timers")
+        
+        return len(timers)
     
     except Exception as e:
         logger.error(f"Error checking timers: {e}")
