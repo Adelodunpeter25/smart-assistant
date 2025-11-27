@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function Register() {
+const Register = memo(() => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -80,4 +80,8 @@ export default function Register() {
       </Card>
     </div>
   );
-}
+});
+
+Register.displayName = 'Register';
+
+export default Register;

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function Login() {
+const Login = memo(() => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, loading, error } = useAuth();
@@ -67,4 +67,8 @@ export default function Login() {
       </Card>
     </div>
   );
-}
+});
+
+Login.displayName = 'Login';
+
+export default Login;
