@@ -26,7 +26,7 @@ class LLMService:
                     {"role": "system", "content": RESPONSE_PROMPT},
                     {"role": "user", "content": f"User asked: {user_message}\n\nResult: {result_summary}\n\nGenerate a natural response:"},
                 ],
-                temperature=0.7,
+                temperature=0.9,
                 max_tokens=200,
             )
             return {"response": response.choices[0].message.content}
@@ -40,7 +40,7 @@ class LLMService:
             ],
             tools=TOOLS,
             tool_choice="auto",
-            temperature=0.7,
+            temperature=0.9,
             max_tokens=500,
         )
 
