@@ -2,13 +2,13 @@
 
 import pytest
 from datetime import datetime, timedelta
-from httpx import AsyncClient
-from app.main import app
+from httpx import AsyncClient, ASGITransport
+from main import app
 
 
 async def get_auth_token():
     """Helper to get auth token."""
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         response = await client.post(
             "/auth/signup",
             json={"email": f"timer{datetime.utcnow().timestamp()}@example.com", "password": "password123", "name": "Timer User"}
@@ -21,7 +21,7 @@ async def test_set_timer():
     """Test setting a timer."""
     token = await get_auth_token()
     
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         response = await client.post(
             "/timers/timer",
             headers={"Authorization": f"Bearer {token}"},
@@ -41,7 +41,7 @@ async def test_set_alarm():
     token = await get_auth_token()
     trigger_time = (datetime.utcnow() + timedelta(hours=1)).isoformat()
     
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         response = await client.post(
             "/timers/alarm",
             headers={"Authorization": f"Bearer {token}"},
@@ -59,7 +59,7 @@ async def test_list_timers():
     """Test listing timers."""
     token = await get_auth_token()
     
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         # Create timer
         await client.post(
             "/timers/timer",
@@ -82,7 +82,7 @@ async def test_cancel_timer():
     """Test cancelling a timer."""
     token = await get_auth_token()
     
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         # Create timer
         create_response = await client.post(
             "/timers/timer",
@@ -107,7 +107,7 @@ async def test_timer_isolation():
     token1 = await get_auth_token()
     token2 = await get_auth_token()
     
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         # User 1 creates timer
         create_response = await client.post(
             "/timers/timer",

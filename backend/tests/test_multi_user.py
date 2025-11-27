@@ -2,13 +2,13 @@
 
 import pytest
 from datetime import datetime
-from httpx import AsyncClient
-from app.main import app
+from httpx import AsyncClient, ASGITransport
+from main import app
 
 
 async def create_user(email_prefix: str):
     """Helper to create user and return token."""
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         response = await client.post(
             "/auth/signup",
             json={
@@ -26,7 +26,7 @@ async def test_task_isolation():
     token1 = await create_user("task1")
     token2 = await create_user("task2")
     
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         # User 1 creates task
         await client.post(
             "/tasks",
@@ -66,7 +66,7 @@ async def test_note_isolation():
     token1 = await create_user("note1")
     token2 = await create_user("note2")
     
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         # User 1 creates note
         await client.post(
             "/notes",
@@ -106,7 +106,7 @@ async def test_calendar_isolation():
     token1 = await create_user("cal1")
     token2 = await create_user("cal2")
     
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         # User 1 creates event
         await client.post(
             "/calendar/events",
@@ -154,7 +154,7 @@ async def test_unauthorized_access():
     token1 = await create_user("unauth1")
     token2 = await create_user("unauth2")
     
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         # User 1 creates task
         create_response = await client.post(
             "/tasks",

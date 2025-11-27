@@ -1,10 +1,15 @@
 """Pytest configuration."""
 
 import pytest
+import pytest_asyncio
 import asyncio
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from app.core.database import Base, get_db
-from app.main import app
+from main import app
 
 pytest_plugins = ('pytest_asyncio',)
 
@@ -19,7 +24,7 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest_asyncio.fixture(scope="function", autouse=True)
 async def setup_database():
     """Setup test database before each test."""
     engine = create_async_engine(TEST_DATABASE_URL, echo=False)
