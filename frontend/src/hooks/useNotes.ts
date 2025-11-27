@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { api } from '@/services/api';
-import type { Note, NoteCreate, NoteUpdate, ApiResponse } from '@/types';
+import type { Note, NoteCreate, NoteUpdate } from '@/types';
 
 export function useNotes() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -58,7 +58,7 @@ export function useNotes() {
     setLoading(true);
     setError(null);
     try {
-      await api.delete<ApiResponse>(`/notes/${id}`);
+      await api.delete(`/notes/${id}`);
       setNotes(prev => prev.filter(n => n.id !== id));
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to delete note');

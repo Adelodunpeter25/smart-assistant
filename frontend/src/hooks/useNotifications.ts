@@ -12,6 +12,7 @@ export function useNotifications() {
       if (data.type === 'notification') {
         const newNotification: Notification = {
           id: Date.now(),
+          user_id: 0,
           message: data.message,
           is_read: false,
           created_at: new Date().toISOString(),
@@ -21,7 +22,9 @@ export function useNotifications() {
       }
     });
 
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const getNotifications = async () => {
