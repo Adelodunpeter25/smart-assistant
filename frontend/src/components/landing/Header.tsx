@@ -11,9 +11,9 @@ export const Header = memo(() => {
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <a href="/" className="text-xl font-bold">Smart Assistant</a>
         <nav className="hidden md:flex items-center gap-6">
-          <a href="#features" className="text-sm hover:text-primary transition-colors">Features</a>
-          <a href="#pricing" className="text-sm hover:text-primary transition-colors">Pricing</a>
+          <a href="/" className="text-sm hover:text-primary transition-colors">Home</a>
           <a href="#about" className="text-sm hover:text-primary transition-colors">About</a>
+          <a href="#contact" className="text-sm hover:text-primary transition-colors">Contact</a>
         </nav>
         <div className="flex items-center gap-2">
           <button
