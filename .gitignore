@@ -60,3 +60,8 @@ temp/
 
 # Celery
 celerybeat-schedule*
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
