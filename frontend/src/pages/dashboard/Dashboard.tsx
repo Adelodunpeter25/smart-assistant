@@ -12,7 +12,7 @@ const Dashboard = memo(() => {
     { icon: StickyNote, label: 'Notes', value: loading ? '...' : notes.toString(), color: 'text-blue-500' },
     { icon: CheckSquare, label: 'Tasks', value: loading ? '...' : tasks.toString(), color: 'text-green-500' },
     { icon: Calendar, label: 'Events', value: loading ? '...' : events.toString(), color: 'text-purple-500' },
-    { icon: Clock, label: 'Active Timers', value: loading ? '...' : timers.toString(), color: 'text-orange-500' },
+    { icon: Clock, label: 'Timers', value: loading ? '...' : timers.toString(), color: 'text-orange-500' },
   ];
 
   return (

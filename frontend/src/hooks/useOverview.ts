@@ -36,7 +36,7 @@ export const useOverview = (): OverviewStats => {
         setStats({
           tasks: tasksData.length,
           events: eventsData.length,
-          timers: timersData.filter((t: any) => t.status === 'active').length,
+          timers: timersData.length,
           notes: notesData.length,
           loading: false,
         });
