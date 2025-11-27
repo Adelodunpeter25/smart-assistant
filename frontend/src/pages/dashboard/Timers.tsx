@@ -90,17 +90,24 @@ const Timers = memo(() => {
             <DialogTitle>Create Timer</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4">
-            <Input
-              type="number"
-              placeholder="Duration (minutes)"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-            />
-            <Input
-              placeholder="Label (optional)"
-              value={label}
-              onChange={(e) => setLabel(e.target.value)}
-            />
+            <div>
+              <label className="text-sm font-medium mb-2 block">Duration (minutes)</label>
+              <Input
+                type="number"
+                placeholder="Enter duration in minutes"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">Label</label>
+              <Input
+                placeholder="Enter label (optional)"
+                value={label}
+                onChange={(e) => setLabel(e.target.value)}
+              />
+            </div>
             <div className="flex justify-end">
               <Button type="submit" disabled={submitting}>
                 {submitting ? 'Creating...' : 'Create Timer'}

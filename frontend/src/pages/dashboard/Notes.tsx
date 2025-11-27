@@ -87,17 +87,24 @@ const Notes = memo(() => {
             <DialogTitle>Create Note</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4">
-            <textarea
-              className="w-full min-h-[100px] p-3 rounded-lg border bg-background"
-              placeholder="Note content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-            <Input
-              placeholder="Tags (comma separated)"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-            />
+            <div>
+              <label className="text-sm font-medium mb-2 block">Content</label>
+              <textarea
+                className="w-full min-h-[100px] p-3 rounded-lg border bg-background"
+                placeholder="Enter note content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">Tags</label>
+              <Input
+                placeholder="Enter tags (comma separated)"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+              />
+            </div>
             <div className="flex justify-end">
               <Button type="submit" disabled={submitting}>
                 {submitting ? 'Creating...' : 'Create Note'}

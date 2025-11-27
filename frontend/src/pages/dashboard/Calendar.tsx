@@ -99,27 +99,40 @@ const Calendar = memo(() => {
             <DialogTitle>Create Event</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4">
-            <Input
-              placeholder="Event title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            <Input
-              placeholder="Description (optional)"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <Input
-              type="datetime-local"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-            />
-            <Input
-              type="datetime-local"
-              placeholder="End time (optional)"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-            />
+            <div>
+              <label className="text-sm font-medium mb-2 block">Title</label>
+              <Input
+                placeholder="Enter event title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">Description</label>
+              <Input
+                placeholder="Enter description (optional)"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">Start Date & Time</label>
+              <Input
+                type="datetime-local"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">End Date & Time</label>
+              <Input
+                type="datetime-local"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+              />
+            </div>
             <div className="flex justify-end">
               <Button type="submit" disabled={submitting}>
                 {submitting ? 'Creating...' : 'Create Event'}
