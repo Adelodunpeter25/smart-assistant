@@ -5,6 +5,13 @@ from app.schemas.note import NoteCreate, NoteUpdate, NoteResponse
 from app.schemas.reminder import ReminderCreate, ReminderResponse
 from app.schemas.email import EmailSend, EmailLogResponse
 from app.schemas.email_draft import EmailDraftRequest, EmailDraftResponse
+from app.schemas.search import (
+    SearchRequest,
+    SearchResponse,
+    SearchResult,
+    SummarizeRequest,
+    SummarizeResponse,
+)
 from app.schemas.response import SuccessResponse, ErrorResponse
 
 __all__ = [
@@ -19,6 +26,11 @@ __all__ = [
     "EmailLogResponse",
     "EmailDraftRequest",
     "EmailDraftResponse",
+    "SearchRequest",
+    "SearchResponse",
+    "SearchResult",
+    "SummarizeRequest",
+    "SummarizeResponse",
     "SuccessResponse",
     "ErrorResponse",
 ]

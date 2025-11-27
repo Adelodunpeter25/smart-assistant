@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import get_settings
 from app.middleware import setup_logging
-from app.routes import health_router, calendar_router, note_router, email_router
+from app.routes import health_router, calendar_router, note_router, email_router, search_router
 
 settings = get_settings()
 logger = logging.getLogger(__name__)
@@ -41,3 +41,4 @@ app.include_router(health_router)
 app.include_router(calendar_router)
 app.include_router(note_router)
 app.include_router(email_router)
+app.include_router(search_router)
