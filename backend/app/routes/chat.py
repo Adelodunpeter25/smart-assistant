@@ -28,9 +28,13 @@ async def chat(
         # Execute the tool
         tool_result = await ToolExecutor.execute(db, tool_name, parameters)
         
-        # Generate natural response
+        # Generate natural response using LLM
         if tool_result["success"]:
-            response = f"Done! I've {tool_name.replace('_', ' ')}."
+            response = LLMService.generate_response(
+                chat_request.message,
+                tool_name,
+                tool_result
+            )
         else:
             response = f"Sorry, I couldn't complete that: {tool_result.get('error')}"
         
