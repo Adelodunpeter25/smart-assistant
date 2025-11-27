@@ -45,9 +45,8 @@ export const ChatMessage = memo(({ message }: ChatMessageProps) => {
             part.type === 'link' ? (
               <Button
                 key={idx}
-                variant="outline"
                 size="sm"
-                className="inline-flex items-center gap-1 mx-1 my-0.5 h-7 text-xs"
+                className="inline-flex items-center gap-1 mx-1 my-0.5 h-7 text-xs bg-primary text-primary-foreground hover:bg-primary/90"
                 onClick={() => window.open(part.content, '_blank', 'noopener,noreferrer')}
               >
                 Visit <ExternalLink className="w-3 h-3" />
