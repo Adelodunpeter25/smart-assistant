@@ -23,6 +23,19 @@ const Calendar = memo(() => {
     getEvents();
   }, []);
 
+  if (loading && events.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <CalendarIcon className="w-16 h-16 text-muted-foreground mb-4 mx-auto animate-pulse" />
+            <p className="text-muted-foreground">Loading events...</p>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !startTime) return;
@@ -58,12 +71,7 @@ const Calendar = memo(() => {
           </Button>
         </div>
 
-        {loading && events.length === 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-            <CalendarIcon className="w-16 h-16 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">Loading events...</p>
-          </div>
-        ) : events.length === 0 ? (
+        {events.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
             <CalendarIcon className="w-16 h-16 text-muted-foreground mb-4" />
             <p className="text-lg font-medium">No events yet</p>

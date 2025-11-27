@@ -21,6 +21,19 @@ const Timers = memo(() => {
     getTimers();
   }, []);
 
+  if (loading && timers.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <Clock className="w-16 h-16 text-muted-foreground mb-4 mx-auto animate-pulse" />
+            <p className="text-muted-foreground">Loading timers...</p>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!duration) return;
@@ -49,12 +62,7 @@ const Timers = memo(() => {
           </Button>
         </div>
 
-        {loading && timers.length === 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-            <Clock className="w-16 h-16 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">Loading timers...</p>
-          </div>
-        ) : timers.length === 0 ? (
+        {timers.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
             <Clock className="w-16 h-16 text-muted-foreground mb-4" />
             <p className="text-lg font-medium">No timers yet</p>

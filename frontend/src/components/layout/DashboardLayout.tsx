@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Sidebar, TopBar, BottomBar } from '@/components/dashboard';
+import { Sidebar, TopBar, BottomBar, FloatingChat } from '@/components/dashboard';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -14,6 +14,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
         {children}
       </main>
       <BottomBar />
+      <FloatingChat />
     </div>
   );
 });

@@ -21,6 +21,19 @@ const Notes = memo(() => {
     getNotes();
   }, []);
 
+  if (loading && notes.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <StickyNote className="w-16 h-16 text-muted-foreground mb-4 mx-auto animate-pulse" />
+            <p className="text-muted-foreground">Loading notes...</p>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!content.trim()) return;
@@ -49,12 +62,7 @@ const Notes = memo(() => {
           </Button>
         </div>
 
-        {loading && notes.length === 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-            <StickyNote className="w-16 h-16 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">Loading notes...</p>
-          </div>
-        ) : notes.length === 0 ? (
+        {notes.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
             <StickyNote className="w-16 h-16 text-muted-foreground mb-4" />
             <p className="text-lg font-medium">No notes yet</p>

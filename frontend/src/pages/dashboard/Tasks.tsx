@@ -21,6 +21,19 @@ const Tasks = memo(() => {
     getTasks();
   }, []);
 
+  if (loading && tasks.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <CheckSquare className="w-16 h-16 text-muted-foreground mb-4 mx-auto animate-pulse" />
+            <p className="text-muted-foreground">Loading tasks...</p>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
@@ -49,12 +62,7 @@ const Tasks = memo(() => {
           </Button>
         </div>
 
-        {loading && tasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-            <CheckSquare className="w-16 h-16 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">Loading tasks...</p>
-          </div>
-        ) : tasks.length === 0 ? (
+        {tasks.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
             <CheckSquare className="w-16 h-16 text-muted-foreground mb-4" />
             <p className="text-lg font-medium">No tasks yet</p>
