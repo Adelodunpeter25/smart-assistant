@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { useChat } from '@/hooks';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
