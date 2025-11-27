@@ -45,10 +45,12 @@ logs/
 .coverage
 htmlcov/
 
-# Models
+# Models and Data
 models/*.bin
 models/*.gguf
 *.gguf
+backend/data/*
+!backend/data/.gitkeep
 
 # Temporary files
 tmp/
