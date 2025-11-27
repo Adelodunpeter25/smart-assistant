@@ -1,10 +1,10 @@
 .PHONY: install dev db-up db-down db-reset migrate-init migrate-make migrate migrate-status migrate-history run test clean
 
 install:
-	cd backend && uv sync
+	uv sync
 
 dev:
-	cd backend && uv sync --dev
+	uv sync --dev
 
 db-up:
 	docker-compose up -d
@@ -17,25 +17,25 @@ db-reset:
 	docker-compose up -d
 
 migrate-init:
-	cd backend && uv run migrator init
+	uv run migrator init
 
 migrate-make:
-	cd backend && uv run migrator makemigrations "$(msg)"
+	uv run migrator makemigrations "$(msg)"
 
 migrate:
-	cd backend && uv run migrator migrate
+	uv run migrator migrate
 
 migrate-status:
-	cd backend && uv run migrator status
+	uv run migrator status
 
 migrate-history:
-	cd backend && uv run migrator history
+	uv run migrator history
 
 run:
-	cd backend && uv run uvicorn main:app --reload --port 8000
+	uv run uvicorn main:app --reload --port 8000
 
 test:
-	cd backend && uv run pytest
+	uv run pytest
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +

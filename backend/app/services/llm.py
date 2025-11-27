@@ -84,7 +84,7 @@ TOOLS = [
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "Search query"},
-                    "max_results": {"type": "integer", "description": "Max results"},
+                    "max_results": {"type": "integer", "description": "Max results (default 5)", "default": 5},
                 },
                 "required": ["query"],
             },
@@ -118,7 +118,7 @@ class LLMService:
         if tool_result:
             result_summary = json.dumps(tool_result.get("data", {}), indent=2)
             response = client.chat.completions.create(
-                model="llama-3.1-70b-versatile",
+                model="llama-3.3-70b-versatile",
                 messages=[
                     {"role": "system", "content": RESPONSE_PROMPT},
                     {"role": "user", "content": f"User asked: {user_message}\n\nResult: {result_summary}\n\nGenerate a natural response:"},
@@ -130,7 +130,7 @@ class LLMService:
         
         # Extract tool call from user message
         response = client.chat.completions.create(
-            model="llama-3.1-70b-versatile",
+            model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": user_message},

@@ -45,7 +45,7 @@ class ToolExecutor:
 
         elif tool_name == "search_web":
             query = parameters.get("query")
-            max_results = parameters.get("max_results", 5)
+            max_results = int(parameters.get("max_results", 5))
             results = await SearchService.search_web(query, max_results)
             return {"success": True, "data": {"results": results[:3]}}
 
