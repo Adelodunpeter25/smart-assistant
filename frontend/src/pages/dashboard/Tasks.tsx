@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useTasks } from '@/hooks';
-import { Plus, Trash2, Check } from 'lucide-react';
+import { Plus, Trash2, Check, CheckSquare } from 'lucide-react';
 
 const Tasks = memo(() => {
   const { tasks, loading, getTasks, createTask, deleteTask, completeTask } = useTasks();
