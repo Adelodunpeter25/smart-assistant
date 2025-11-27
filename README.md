@@ -23,7 +23,8 @@ make dev              # Start server (http://localhost:8000)
 
 ## API Keys
 
-- **GROQ_API_KEY**: [console.groq.com](https://console.groq.com) (or use Workers AI)
+- **CLOUDFLARE_ACCOUNT_ID** & **CLOUDFLARE_API_TOKEN**: [dash.cloudflare.com](https://dash.cloudflare.com) (recommended)
+- **GROQ_API_KEY**: [console.groq.com](https://console.groq.com) (alternative)
 - **EXCHANGERATE_API_KEY**: [exchangerate-api.com](https://www.exchangerate-api.com)
 - **RESEND_API_KEY**: [resend.com](https://resend.com)
 
