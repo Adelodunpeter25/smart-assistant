@@ -9,7 +9,10 @@ export const Header = memo(() => {
   return (
     <header className="fixed top-0 w-full z-50 glass border-b">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <a href="/" className="text-xl font-bold">Smart Assistant</a>
+        <a href="/" className="flex items-center gap-2">
+          <img src="/icon.svg" alt="Smart Assistant" className="w-8 h-8" />
+          <span className="text-xl font-bold">Smart Assistant</span>
+        </a>
         <nav className="hidden md:flex items-center gap-6">
           <a href="/" className="text-sm hover:text-primary transition-colors">Home</a>
           <a href="#about" className="text-sm hover:text-primary transition-colors">About</a>

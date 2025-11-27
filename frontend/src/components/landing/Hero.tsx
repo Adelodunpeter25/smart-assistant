@@ -6,6 +6,10 @@ export const Hero = memo(() => {
   return (
     <section className="min-h-screen flex items-center justify-center liquid-gradient">
       <div className="max-w-4xl mx-auto px-4 text-center space-y-8">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm font-medium">
+          <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+          AI-Powered Productivity
+        </div>
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
           Your AI-Powered
           <br />
