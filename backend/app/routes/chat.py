@@ -4,8 +4,10 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.core.config import get_settings
+from app.core.deps import get_current_user
 from app.services.groq import GroqService
 from app.services.workersai import WorkersAIService
+from app.models.user import User
 
 settings = get_settings()
 from app.services.tool_executor import ToolExecutor
@@ -18,6 +20,7 @@ router = APIRouter(prefix="/chat", tags=["Chat"])
 async def chat(
     chat_request: ChatRequest,
     db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     """Process chat message and execute tools if needed."""
     
@@ -33,7 +36,7 @@ async def chat(
         parameters = llm_result["parameters"]
         
         # Execute the tool
-        tool_result = await ToolExecutor.execute(db, tool_name, parameters)
+        tool_result = await ToolExecutor.execute(db, tool_name, parameters, current_user.id)
         
         # Generate natural response using LLM
         if tool_result["success"]:
