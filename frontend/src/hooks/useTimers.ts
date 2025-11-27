@@ -11,9 +11,10 @@ export function useTimers() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<Timer[]>('/timers');
-      setTimers(response.data);
-      return response.data;
+      const response = await api.get('/timers');
+      const timersData = Array.isArray(response.data.data) ? response.data.data : [];
+      setTimers(timersData);
+      return timersData;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to fetch timers');
       throw err;
@@ -26,9 +27,10 @@ export function useTimers() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post<Timer>('/timers/timer', data);
-      setTimers(prev => [...prev, response.data]);
-      return response.data;
+      const response = await api.post('/timers/timer', data);
+      const newTimer = response.data.data;
+      setTimers(prev => [...prev, newTimer]);
+      return newTimer;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to create timer');
       throw err;
@@ -41,9 +43,10 @@ export function useTimers() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post<Timer>('/timers/alarm', data);
-      setTimers(prev => [...prev, response.data]);
-      return response.data;
+      const response = await api.post('/timers/alarm', data);
+      const newAlarm = response.data.data;
+      setTimers(prev => [...prev, newAlarm]);
+      return newAlarm;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to create alarm');
       throw err;

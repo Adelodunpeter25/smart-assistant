@@ -11,9 +11,10 @@ export function useCalendar() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<CalendarEvent[]>('/calendar/events');
-      setEvents(response.data);
-      return response.data;
+      const response = await api.get('/calendar/events');
+      const eventsData = Array.isArray(response.data.data) ? response.data.data : [];
+      setEvents(eventsData);
+      return eventsData;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to fetch events');
       throw err;
@@ -26,9 +27,10 @@ export function useCalendar() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post<CalendarEvent>('/calendar/events', data);
-      setEvents(prev => [...prev, response.data]);
-      return response.data;
+      const response = await api.post('/calendar/events', data);
+      const newEvent = response.data.data;
+      setEvents(prev => [...prev, newEvent]);
+      return newEvent;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to create event');
       throw err;

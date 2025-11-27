@@ -11,9 +11,10 @@ export function useTasks() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<Task[]>('/tasks');
-      setTasks(response.data);
-      return response.data;
+      const response = await api.get('/tasks');
+      const tasksData = Array.isArray(response.data.data) ? response.data.data : [];
+      setTasks(tasksData);
+      return tasksData;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to fetch tasks');
       throw err;
@@ -26,9 +27,10 @@ export function useTasks() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post<Task>('/tasks', data);
-      setTasks(prev => [...prev, response.data]);
-      return response.data;
+      const response = await api.post('/tasks', data);
+      const newTask = response.data.data;
+      setTasks(prev => [...prev, newTask]);
+      return newTask;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to create task');
       throw err;
@@ -41,9 +43,10 @@ export function useTasks() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.put<Task>(`/tasks/${id}`, data);
-      setTasks(prev => prev.map(t => t.id === id ? response.data : t));
-      return response.data;
+      const response = await api.put(`/tasks/${id}`, data);
+      const updatedTask = response.data.data;
+      setTasks(prev => prev.map(t => t.id === id ? updatedTask : t));
+      return updatedTask;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to update task');
       throw err;

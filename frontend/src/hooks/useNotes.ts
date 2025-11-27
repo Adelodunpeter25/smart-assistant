@@ -11,9 +11,10 @@ export function useNotes() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<Note[]>('/notes');
-      setNotes(response.data);
-      return response.data;
+      const response = await api.get('/notes');
+      const notesData = Array.isArray(response.data.data) ? response.data.data : [];
+      setNotes(notesData);
+      return notesData;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to fetch notes');
       throw err;
@@ -26,9 +27,10 @@ export function useNotes() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post<Note>('/notes', data);
-      setNotes(prev => [...prev, response.data]);
-      return response.data;
+      const response = await api.post('/notes', data);
+      const newNote = response.data.data;
+      setNotes(prev => [...prev, newNote]);
+      return newNote;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to create note');
       throw err;
