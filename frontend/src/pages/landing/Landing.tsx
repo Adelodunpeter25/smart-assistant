@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Header, Hero, Features, CTA, Footer } from '@/components/landing';
+import { Header, Hero, Features, FAQ, CTA, Footer } from '@/components/landing';
 
 const Landing = memo(() => {
   return (
@@ -7,6 +7,7 @@ const Landing = memo(() => {
       <Header />
       <Hero />
       <Features />
+      <FAQ />
       <CTA />
       <Footer />
     </>

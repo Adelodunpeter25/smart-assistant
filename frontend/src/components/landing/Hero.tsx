@@ -13,7 +13,7 @@ export const Hero = memo(() => {
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
           Your AI-Powered
           <br />
-          <span className="text-primary">Smart Assistant</span>
+          <span className="text-primary">Personal Assistant</span>
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Automate tasks, manage your schedule, and boost productivity with intelligent conversation and seamless integrations.

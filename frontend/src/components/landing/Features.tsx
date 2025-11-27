@@ -21,9 +21,9 @@ export const Features = memo(() => {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature) => (
-            <Card key={feature.title} glass>
+            <Card key={feature.title} glass className="transition-all hover:scale-[1.02] hover:shadow-xl cursor-pointer">
               <CardHeader>
-                <feature.icon className="w-10 h-10 text-primary mb-2" />
+                <feature.icon className="w-10 h-10 text-primary mb-2 transition-transform group-hover:scale-110" />
                 <CardTitle>{feature.title}</CardTitle>
                 <CardDescription>{feature.description}</CardDescription>
               </CardHeader>
