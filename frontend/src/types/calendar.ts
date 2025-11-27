@@ -12,5 +12,5 @@ export interface CalendarEventCreate {
   title: string
   description?: string
   start_time: string
-  end_time: string
+  end_time?: string
 }

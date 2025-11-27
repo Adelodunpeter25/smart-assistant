@@ -17,6 +17,8 @@ export interface Message {
   id: string
   content: string
   isUser: boolean
+  role?: string
   timestamp: Date
   toolUsed?: string
+  tool_calls?: string[]
 }

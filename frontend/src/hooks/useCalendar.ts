@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { api } from '@/services/api';
-import type { CalendarEvent, CalendarEventCreate, ApiResponse } from '@/types';
+import type { CalendarEvent, CalendarEventCreate } from '@/types';
 
 export function useCalendar() {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -43,7 +43,7 @@ export function useCalendar() {
     setLoading(true);
     setError(null);
     try {
-      await api.delete<ApiResponse>(`/calendar/events/${id}`);
+      await api.delete(`/calendar/events/${id}`);
       setEvents(prev => prev.filter(e => e.id !== id));
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to delete event');

@@ -11,7 +11,7 @@ export function useChat() {
     setLoading(true);
     setError(null);
 
-    const userMessage: ChatMessage = {
+    const userMessage: Message = {
       role: 'user',
       content: message,
       timestamp: new Date().toISOString(),
@@ -21,7 +21,7 @@ export function useChat() {
     try {
       const response = await api.post<ChatResponse>('/chat', { message } as ChatRequest);
       
-      const assistantMessage: ChatMessage = {
+      const assistantMessage: Message = {
         role: 'assistant',
         content: response.data.response,
         timestamp: new Date().toISOString(),
