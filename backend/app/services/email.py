@@ -40,10 +40,10 @@ class EmailService:
         return email_log
 
     @staticmethod
-    async def get_email_logs(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[EmailLog]:
+    async def get_email_logs(db: AsyncSession, user_id: int, skip: int = 0, limit: int = 100) -> list[EmailLog]:
         """Get email logs with pagination."""
         from sqlalchemy import select
-        query = select(EmailLog).order_by(EmailLog.sent_at.desc()).offset(skip).limit(limit)
+        query = select(EmailLog).where(EmailLog.user_id == user_id).order_by(EmailLog.sent_at.desc()).offset(skip).limit(limit)
         result = await db.execute(query)
         return list(result.scalars().all())
 

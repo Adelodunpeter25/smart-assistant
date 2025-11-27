@@ -1,6 +1,7 @@
 """Calculator routes."""
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from app.core.deps import get_current_user
 from app.services.calculator import CalculatorService
 from app.schemas import SuccessResponse
 from app.schemas.calculator import (
@@ -9,12 +10,16 @@ from app.schemas.calculator import (
     ConvertCurrencyRequest,
     ConvertCurrencyResponse,
 )
+from app.models.user import User
 
 router = APIRouter(prefix="/calculator", tags=["Calculator"])
 
 
 @router.post("/compute", response_model=SuccessResponse[CalculateResponse])
-async def compute(calculate_request: CalculateRequest):
+async def compute(
+    calculate_request: CalculateRequest,
+    current_user: User = Depends(get_current_user),
+):
     """Perform mathematical calculation."""
     try:
         result = CalculatorService.calculate(calculate_request.expression)
@@ -28,7 +33,10 @@ async def compute(calculate_request: CalculateRequest):
 
 
 @router.post("/convert", response_model=SuccessResponse[ConvertCurrencyResponse])
-async def convert_currency(convert_request: ConvertCurrencyRequest):
+async def convert_currency(
+    convert_request: ConvertCurrencyRequest,
+    current_user: User = Depends(get_current_user),
+):
     """Convert currency."""
     try:
         result = await CalculatorService.convert_currency(
