@@ -1,20 +1,24 @@
 """Main FastAPI application."""
 
+import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import get_settings
 from app.middleware import setup_logging
-from app.routes import health_router
+from app.routes.health import router as health_router
 
 settings = get_settings()
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan context manager."""
     setup_logging()
+    logger.info(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}")
     yield
+    logger.info("Shutting down application")
 
 
 app = FastAPI(
@@ -33,8 +37,3 @@ app.add_middleware(
 )
 
 app.include_router(health_router)
-
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=settings.DEBUG)
