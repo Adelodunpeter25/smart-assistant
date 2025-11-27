@@ -7,6 +7,7 @@ from app.models.email_log import EmailLog, EmailStatus
 from app.models.task import Task, TaskPriority, TaskStatus
 from app.models.user import User, RefreshToken
 from app.models.timer import Timer, TimerType, TimerStatus
+from app.models.notification import Notification
 
 __all__ = [
     "CalendarEvent",
@@ -23,4 +24,5 @@ __all__ = [
     "Timer",
     "TimerType",
     "TimerStatus",
+    "Notification",
 ]

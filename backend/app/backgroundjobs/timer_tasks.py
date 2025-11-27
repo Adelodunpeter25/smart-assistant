@@ -3,7 +3,6 @@
 import logging
 from app.backgroundjobs.celery_app import celery_app
 from app.core.database import get_sync_db
-from app.services.timer import TimerService
 
 logger = logging.getLogger(__name__)
 
@@ -31,9 +30,17 @@ def check_timers():
             timer.status = TimerStatus.COMPLETED
             timer.is_notified = True
             timer.completed_at = datetime.utcnow()
+            
+            # Create notification
+            from app.models.notification import Notification
+            notification_msg = f"⏰ Timer finished: {timer.label}" if timer.label else "⏰ Timer finished!"
+            notification = Notification(
+                user_id=timer.user_id,
+                message=notification_msg,
+            )
+            db.add(notification)
             db.commit()
             
-            notification_msg = f"⏰ Timer finished: {timer.label}" if timer.label else "⏰ Timer finished!"
             logger.info(f"Timer {timer.id} triggered for user {timer.user_id}: {notification_msg}")
         
         if timers:

@@ -1,55 +1,26 @@
 """Main FastAPI application."""
 
 import logging
-import subprocess
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import get_settings
 from app.middleware import setup_logging
+from app.utils.celery_starter import start_celery, stop_celery
 from app.routes import health_router, calendar_router, note_router, email_router, search_router, calculator_router, task_router, timer_router, chat_router, auth_router
 
 settings = get_settings()
 logger = logging.getLogger(__name__)
 
-celery_worker = None
-celery_beat = None
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan context manager."""
-    global celery_worker, celery_beat
-    
     setup_logging()
     logger.info(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}")
-    
-    # Start Celery worker and beat
-    try:
-        celery_worker = subprocess.Popen(
-            ["celery", "-A", "app.backgroundjobs.celery_app", "worker", "--loglevel=info"],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        celery_beat = subprocess.Popen(
-            ["celery", "-A", "app.backgroundjobs.celery_app", "beat", "--loglevel=info"],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        logger.info("Celery worker and beat started")
-    except Exception as e:
-        logger.error(f"Failed to start Celery: {e}")
-    
+    start_celery()
     yield
-    
-    # Stop Celery
-    if celery_worker:
-        celery_worker.terminate()
-        celery_worker.wait()
-    if celery_beat:
-        celery_beat.terminate()
-        celery_beat.wait()
-    
+    stop_celery()
     logger.info("Shutting down application")
 
 
