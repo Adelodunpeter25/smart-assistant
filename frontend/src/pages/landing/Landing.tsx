@@ -1,12 +1,14 @@
 import { memo } from 'react';
-import { Hero, Features, CTA } from '@/components/landing';
+import { Header, Hero, Features, CTA, Footer } from '@/components/landing';
 
 const Landing = memo(() => {
   return (
     <>
+      <Header />
       <Hero />
       <Features />
       <CTA />
+      <Footer />
     </>
   );
 });
