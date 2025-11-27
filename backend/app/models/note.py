@@ -1,0 +1,17 @@
+"""Note models."""
+
+from datetime import datetime
+from sqlalchemy import Column, Integer, Text, DateTime, String
+from app.core.database import Base
+
+
+class Note(Base):
+    """Note model."""
+    
+    __tablename__ = "notes"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(Text, nullable=False)
+    tags = Column(String(500), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
