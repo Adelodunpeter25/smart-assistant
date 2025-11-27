@@ -123,7 +123,7 @@ class ToolExecutor:
 
         # Timer tools
         elif tool_name == "set_timer":
-            duration_seconds = parameters.get("duration_seconds")
+            duration_seconds = int(parameters.get("duration_seconds"))
             label = parameters.get("label")
             timer = await TimerService.create_timer(db, duration_seconds, user_id, label)
             return {"success": True, "data": {"id": timer.id, "duration_seconds": timer.duration_seconds, "trigger_time": str(timer.trigger_time)}}

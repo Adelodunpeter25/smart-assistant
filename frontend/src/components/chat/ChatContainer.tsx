@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { useChat } from '@/hooks';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
@@ -15,7 +15,7 @@ export const ChatContainer = memo(() => {
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)]">
+    <div className="flex flex-col h-full">
       <ScrollArea className="flex-1 p-4">
         <div ref={scrollRef} className="space-y-4">
           {messages.length === 0 ? (
@@ -42,7 +42,7 @@ export const ChatContainer = memo(() => {
           )}
         </div>
       </ScrollArea>
-      <div className="p-4 border-t">
+      <div className="p-4 border-t flex-shrink-0">
         <ChatInput onSend={sendMessage} disabled={loading} />
       </div>
     </div>
