@@ -23,8 +23,8 @@ const faqs = [
     answer: 'Smart Assistant includes AI chat, task management, calendar events, timers and alarms, email integration, web search, currency conversion, calculator, and real-time notifications.',
   },
   {
-    question: 'Is there a free plan?',
-    answer: 'Yes! You can create a free account and start using Smart Assistant immediately. All core features are available to help you boost your productivity.',
+    question: 'Is it free?',
+    answer: 'Yes, it is absolutely free forever! Create an account and enjoy all features without any cost or hidden fees.',
   },
 ];
 

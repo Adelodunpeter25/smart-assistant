@@ -19,16 +19,29 @@ export const Features = memo(() => {
           <h2 className="text-4xl font-bold">Powerful Features</h2>
           <p className="text-xl text-muted-foreground">Everything you need to stay productive</p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature) => (
-            <Card key={feature.title} glass className="transition-all hover:scale-[1.02] hover:shadow-xl cursor-pointer">
-              <CardHeader>
-                <feature.icon className="w-10 h-10 text-primary mb-2 transition-transform group-hover:scale-110" />
-                <CardTitle>{feature.title}</CardTitle>
-                <CardDescription>{feature.description}</CardDescription>
+            <Card key={feature.title} glass className="transition-all hover:scale-[1.05] hover:shadow-2xl cursor-pointer p-2">
+              <CardHeader className="space-y-4">
+                <feature.icon className="w-14 h-14 text-primary" />
+                <CardTitle className="text-xl">{feature.title}</CardTitle>
+                <CardDescription className="text-base">{feature.description}</CardDescription>
               </CardHeader>
             </Card>
           ))}
+        </div>
+        <div className="md:hidden overflow-x-auto scrollbar-hide">
+          <div className="flex gap-6 pb-4 px-4">
+            {features.map((feature) => (
+              <Card key={feature.title} glass className="min-w-[280px] flex-shrink-0 transition-all hover:scale-[1.05] hover:shadow-2xl p-2">
+                <CardHeader className="space-y-4">
+                  <feature.icon className="w-14 h-14 text-primary" />
+                  <CardTitle className="text-xl">{feature.title}</CardTitle>
+                  <CardDescription className="text-base">{feature.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </section>

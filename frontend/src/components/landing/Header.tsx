@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts';
 import { Moon, Sun } from 'lucide-react';
+import { MobileSidebar } from '@/components/MobileSidebar';
 
 export const Header = memo(() => {
   const { theme, toggleTheme } = useTheme();
@@ -26,12 +27,15 @@ export const Header = memo(() => {
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <Button variant="ghost" size="sm" asChild>
-            <a href="/login">Sign In</a>
-          </Button>
-          <Button size="sm" asChild>
-            <a href="/register">Get Started</a>
-          </Button>
+          <div className="hidden md:flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild>
+              <a href="/login">Sign In</a>
+            </Button>
+            <Button size="sm" asChild>
+              <a href="/register">Get Started</a>
+            </Button>
+          </div>
+          <MobileSidebar />
         </div>
       </div>
     </header>
