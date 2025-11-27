@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { api } from '@/services/api';
 import { wsService } from '@/services/websocket';
 import { useAuthStore } from '@/stores';
-import type { LoginRequest, RegisterRequest, AuthResponse, User } from '@/types';
+import type { LoginRequest, RegisterRequest, TokenResponse, User } from '@/types';
 
 export function useAuth() {
   const { user, setUser, logout: clearUser } = useAuthStore();
@@ -13,11 +13,10 @@ export function useAuth() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post<AuthResponse>('/auth/register', data);
+      const response = await api.post<TokenResponse>('/auth/signup', data);
       localStorage.setItem('access_token', response.data.access_token);
       localStorage.setItem('refresh_token', response.data.refresh_token);
-      setUser(response.data.user);
-      wsService.connect(response.data.access_token);
+      await getMe();
       return response.data;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Registration failed');
@@ -31,11 +30,10 @@ export function useAuth() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post<AuthResponse>('/auth/login', data);
+      const response = await api.post<TokenResponse>('/auth/login', data);
       localStorage.setItem('access_token', response.data.access_token);
       localStorage.setItem('refresh_token', response.data.refresh_token);
-      setUser(response.data.user);
-      wsService.connect(response.data.access_token);
+      await getMe();
       return response.data;
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Login failed');

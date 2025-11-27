@@ -26,7 +26,7 @@ export function useTimers() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post<Timer>('/timers', data);
+      const response = await api.post<Timer>('/timers/timer', data);
       setTimers(prev => [...prev, response.data]);
       return response.data;
     } catch (err: any) {

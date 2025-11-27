@@ -11,7 +11,7 @@ export function useCalendar() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<CalendarEvent[]>('/calendar');
+      const response = await api.get<CalendarEvent[]>('/calendar/events');
       setEvents(response.data);
       return response.data;
     } catch (err: any) {
@@ -26,7 +26,7 @@ export function useCalendar() {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post<CalendarEvent>('/calendar', data);
+      const response = await api.post<CalendarEvent>('/calendar/events', data);
       setEvents(prev => [...prev, response.data]);
       return response.data;
     } catch (err: any) {
@@ -41,7 +41,7 @@ export function useCalendar() {
     setLoading(true);
     setError(null);
     try {
-      await api.delete<ApiResponse>(`/calendar/${id}`);
+      await api.delete<ApiResponse>(`/calendar/events/${id}`);
       setEvents(prev => prev.filter(e => e.id !== id));
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to delete event');
