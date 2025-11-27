@@ -17,7 +17,7 @@ async def create_user(email_prefix: str):
                 "name": f"User {email_prefix}"
             }
         )
-        return response.json()["data"]["access_token"]
+        return response.json()["access_token"]
 
 
 @pytest.mark.asyncio

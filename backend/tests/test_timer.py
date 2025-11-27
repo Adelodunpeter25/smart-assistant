@@ -13,7 +13,7 @@ async def get_auth_token():
             "/auth/signup",
             json={"email": f"timer{datetime.utcnow().timestamp()}@example.com", "password": "password123", "name": "Timer User"}
         )
-        return response.json()["data"]["access_token"]
+        return response.json()["access_token"]
 
 
 @pytest.mark.asyncio
