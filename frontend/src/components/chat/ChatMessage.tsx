@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Bot, User } from 'lucide-react';
-import type { ChatMessage as ChatMessageType } from '@/types';
+import type { Message as ChatMessageType } from '@/types';
 
 interface ChatMessageProps {
   message: ChatMessageType;

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Target, Users, Zap } from 'lucide-react';
 
 const values = [
