@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { api } from '@/services/api';
-import type { Task, CreateTaskRequest, UpdateTaskRequest, ApiResponse } from '@/types';
+import type { Task, TaskCreate, TaskUpdate } from '@/types';
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -23,7 +23,7 @@ export function useTasks() {
     }
   };
 
-  const createTask = async (data: CreateTaskRequest) => {
+  const createTask = async (data: TaskCreate) => {
     setLoading(true);
     setError(null);
     try {
@@ -39,7 +39,7 @@ export function useTasks() {
     }
   };
 
-  const updateTask = async (id: number, data: UpdateTaskRequest) => {
+  const updateTask = async (id: number, data: TaskUpdate) => {
     setLoading(true);
     setError(null);
     try {
@@ -59,7 +59,7 @@ export function useTasks() {
     setLoading(true);
     setError(null);
     try {
-      await api.delete<ApiResponse>(`/tasks/${id}`);
+      await api.delete(`/tasks/${id}`);
       setTasks(prev => prev.filter(t => t.id !== id));
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to delete task');
@@ -70,7 +70,7 @@ export function useTasks() {
   };
 
   const completeTask = async (id: number) => {
-    return updateTask(id, { completed: true });
+    return updateTask(id, { status: 'completed' });
   };
 
   return { tasks, loading, error, getTasks, createTask, updateTask, deleteTask, completeTask };

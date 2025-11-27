@@ -75,11 +75,11 @@ const Tasks = memo(() => {
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
-                      <p className={`font-medium ${task.completed ? 'line-through text-muted-foreground' : ''}`}>{task.title}</p>
+                      <p className={`font-medium ${task.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>{task.title}</p>
                       {task.description && <p className="text-sm text-muted-foreground mt-1">{task.description}</p>}
                     </div>
                     <div className="flex gap-1">
-                      {!task.completed && (
+                      {task.status !== 'completed' && (
                         <Button size="sm" variant="ghost" onClick={() => completeTask(task.id)}>
                           <Check className="w-4 h-4" />
                         </Button>
