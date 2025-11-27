@@ -16,8 +16,8 @@ export const Header = memo(() => {
         </a>
         <nav className="hidden md:flex items-center gap-6">
           <a href="/" className="text-sm hover:text-primary transition-colors">Home</a>
-          <a href="#about" className="text-sm hover:text-primary transition-colors">About</a>
-          <a href="#contact" className="text-sm hover:text-primary transition-colors">Contact</a>
+          <a href="/about" className="text-sm hover:text-primary transition-colors">About</a>
+          <a href="/contact" className="text-sm hover:text-primary transition-colors">Contact</a>
         </nav>
         <div className="flex items-center gap-2">
           <button

@@ -21,7 +21,7 @@ export const MobileSidebar = memo(() => {
             className="fixed inset-0 bg-black/50 z-50 md:hidden"
             onClick={() => setIsOpen(false)}
           />
-          <div className="fixed top-0 right-0 h-full w-64 glass border-l z-50 md:hidden">
+          <div className="fixed top-0 right-0 h-full w-64 glass border-l z-[60] md:hidden">
             <div className="flex items-center justify-between p-4 border-b">
               <span className="font-bold">Menu</span>
               <button
@@ -36,7 +36,7 @@ export const MobileSidebar = memo(() => {
               <a href="/" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
                 Home
               </a>
-              <a href="#about" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
+              <a href="/about" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
                 About
               </a>
               <a href="/contact" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
