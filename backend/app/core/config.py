@@ -19,12 +19,8 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = ""
     ANTHROPIC_API_KEY: str = ""
 
-    # Email Configuration
-    SMTP_HOST: str = ""
-    SMTP_PORT: int = 587
-    SMTP_USER: str = ""
-    SMTP_PASSWORD: str = ""
-    SMTP_FROM_EMAIL: str = ""
+    # Email Configuration (Resend)
+    RESEND_API_KEY: str = ""
 
     # LLM Settings
     LLM_PROVIDER: str = "openai"  # openai, anthropic, local
@@ -34,9 +30,6 @@ class Settings(BaseSettings):
 
     # Rate Limiting
     RATE_LIMIT_PER_MINUTE: int = 10
-
-    # Session
-    SESSION_TIMEOUT_MINUTES: int = 30
 
     class Config:
         env_file = ".env"
