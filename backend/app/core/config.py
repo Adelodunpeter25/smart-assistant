@@ -24,9 +24,13 @@ class Settings(BaseSettings):
     # Email Configuration (Resend)
     RESEND_API_KEY: str = ""
     EMAIL_FROM: str = ""
+    
+    # Cloudflare Workers AI
+    CLOUDFLARE_ACCOUNT_ID: str = ""
+    CLOUDFLARE_API_TOKEN: str = ""
 
     # LLM Settings
-    LLM_PROVIDER: str = "openai"  # openai, anthropic, local
+    LLM_PROVIDER: str = "groq"  # groq, workersai, openai, anthropic
     LLM_MODEL: str = "gpt-4"
     LLM_TEMPERATURE: float = 0.7
     LLM_MAX_TOKENS: int = 500
