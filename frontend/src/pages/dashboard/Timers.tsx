@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -13,6 +13,7 @@ const Timers = memo(() => {
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [duration, setDuration] = useState('');
   const [label, setLabel] = useState('');
 
@@ -23,10 +24,15 @@ const Timers = memo(() => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!duration) return;
-    await createTimer({ duration_seconds: parseInt(duration) * 60, label });
-    setDuration('');
-    setLabel('');
-    setOpen(false);
+    setSubmitting(true);
+    try {
+      await createTimer({ duration_seconds: parseInt(duration) * 60, label });
+      setDuration('');
+      setLabel('');
+      setOpen(false);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -43,37 +49,32 @@ const Timers = memo(() => {
           </Button>
         </div>
 
-        <Card glass>
-          <CardHeader>
-            <CardTitle>Your Timers</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {loading && timers.length === 0 ? (
-              <p className="text-muted-foreground">Loading...</p>
-            ) : timers.length === 0 ? (
-              <p className="text-muted-foreground">No timers yet</p>
-            ) : (
-              <div className="space-y-2">
-                {timers.map((timer) => (
-                  <div key={timer.id} className="flex items-start justify-between p-3 rounded-lg border">
+        {loading && timers.length === 0 ? (
+          <p className="text-muted-foreground">Loading...</p>
+        ) : timers.length === 0 ? (
+          <p className="text-muted-foreground">No timers yet</p>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {timers.map((timer) => (
+              <Card key={timer.id} glass>
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
                       <p className="font-medium">{timer.label || 'Timer'}</p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground mt-1">
                         Trigger: {new Date(timer.trigger_time).toLocaleString()}
                       </p>
                       <p className="text-sm text-muted-foreground">Status: {timer.status}</p>
                     </div>
-                    {timer.status === 'active' && (
-                      <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => { setDeleteId(timer.id); setConfirmOpen(true); }}>
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    )}
+                    <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => { setDeleteId(timer.id); setConfirmOpen(true); }}>
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -93,9 +94,11 @@ const Timers = memo(() => {
               value={label}
               onChange={(e) => setLabel(e.target.value)}
             />
-            <Button type="submit" disabled={loading}>
-              Create Timer
-            </Button>
+            <div className="flex justify-end">
+              <Button type="submit" disabled={submitting}>
+                {submitting ? 'Creating...' : 'Create Timer'}
+              </Button>
+            </div>
           </form>
         </DialogContent>
       </Dialog>

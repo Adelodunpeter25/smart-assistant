@@ -13,6 +13,7 @@ const Tasks = memo(() => {
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -23,10 +24,15 @@ const Tasks = memo(() => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
-    await createTask({ title, description });
-    setTitle('');
-    setDescription('');
-    setOpen(false);
+    setSubmitting(true);
+    try {
+      await createTask({ title, description });
+      setTitle('');
+      setDescription('');
+      setOpen(false);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -43,24 +49,21 @@ const Tasks = memo(() => {
           </Button>
         </div>
 
-        <Card glass>
-          <CardHeader>
-            <CardTitle>Your Tasks</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {loading && tasks.length === 0 ? (
-              <p className="text-muted-foreground">Loading...</p>
-            ) : tasks.length === 0 ? (
-              <p className="text-muted-foreground">No tasks yet</p>
-            ) : (
-              <div className="space-y-2">
-                {tasks.map((task) => (
-                  <div key={task.id} className="flex items-center justify-between p-3 rounded-lg border">
+        {loading && tasks.length === 0 ? (
+          <p className="text-muted-foreground">Loading...</p>
+        ) : tasks.length === 0 ? (
+          <p className="text-muted-foreground">No tasks yet</p>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {tasks.map((task) => (
+              <Card key={task.id} glass>
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
-                      <p className={task.completed ? 'line-through text-muted-foreground' : ''}>{task.title}</p>
-                      {task.description && <p className="text-sm text-muted-foreground">{task.description}</p>}
+                      <p className={`font-medium ${task.completed ? 'line-through text-muted-foreground' : ''}`}>{task.title}</p>
+                      {task.description && <p className="text-sm text-muted-foreground mt-1">{task.description}</p>}
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1">
                       {!task.completed && (
                         <Button size="sm" variant="ghost" onClick={() => completeTask(task.id)}>
                           <Check className="w-4 h-4" />
@@ -71,11 +74,11 @@ const Tasks = memo(() => {
                       </Button>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -94,9 +97,11 @@ const Tasks = memo(() => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            <Button type="submit" disabled={loading}>
-              Create Task
-            </Button>
+            <div className="flex justify-end">
+              <Button type="submit" disabled={submitting}>
+                {submitting ? 'Creating...' : 'Create Task'}
+              </Button>
+            </div>
           </form>
         </DialogContent>
       </Dialog>

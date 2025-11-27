@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -13,6 +13,7 @@ const Notes = memo(() => {
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
 
@@ -23,10 +24,15 @@ const Notes = memo(() => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!content.trim()) return;
-    await createNote({ content, tags: tags || undefined });
-    setContent('');
-    setTags('');
-    setOpen(false);
+    setSubmitting(true);
+    try {
+      await createNote({ content, tags: tags || undefined });
+      setContent('');
+      setTags('');
+      setOpen(false);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -43,32 +49,29 @@ const Notes = memo(() => {
           </Button>
         </div>
 
-        <Card glass>
-          <CardHeader>
-            <CardTitle>Your Notes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {loading && notes.length === 0 ? (
-              <p className="text-muted-foreground">Loading...</p>
-            ) : notes.length === 0 ? (
-              <p className="text-muted-foreground">No notes yet</p>
-            ) : (
-              <div className="space-y-2">
-                {notes.map((note) => (
-                  <div key={note.id} className="flex items-start justify-between p-3 rounded-lg border">
+        {loading && notes.length === 0 ? (
+          <p className="text-muted-foreground">Loading...</p>
+        ) : notes.length === 0 ? (
+          <p className="text-muted-foreground">No notes yet</p>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {notes.map((note) => (
+              <Card key={note.id} glass>
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
                       <p className="whitespace-pre-wrap">{note.content}</p>
-                      {note.tags && <p className="text-sm text-muted-foreground mt-1">{note.tags}</p>}
+                      {note.tags && <p className="text-sm text-muted-foreground mt-2">{note.tags}</p>}
                     </div>
                     <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => { setDeleteId(note.id); setConfirmOpen(true); }}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -88,9 +91,11 @@ const Notes = memo(() => {
               value={tags}
               onChange={(e) => setTags(e.target.value)}
             />
-            <Button type="submit" disabled={loading}>
-              Create Note
-            </Button>
+            <div className="flex justify-end">
+              <Button type="submit" disabled={submitting}>
+                {submitting ? 'Creating...' : 'Create Note'}
+              </Button>
+            </div>
           </form>
         </DialogContent>
       </Dialog>

@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -13,6 +13,7 @@ const Calendar = memo(() => {
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -25,17 +26,22 @@ const Calendar = memo(() => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !startTime) return;
-    await createEvent({
-      title,
-      description,
-      start_time: new Date(startTime).toISOString(),
-      end_time: endTime ? new Date(endTime).toISOString() : undefined,
-    });
-    setTitle('');
-    setDescription('');
-    setStartTime('');
-    setEndTime('');
-    setOpen(false);
+    setSubmitting(true);
+    try {
+      await createEvent({
+        title,
+        description,
+        start_time: new Date(startTime).toISOString(),
+        end_time: endTime ? new Date(endTime).toISOString() : undefined,
+      });
+      setTitle('');
+      setDescription('');
+      setStartTime('');
+      setEndTime('');
+      setOpen(false);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -52,23 +58,20 @@ const Calendar = memo(() => {
           </Button>
         </div>
 
-        <Card glass>
-          <CardHeader>
-            <CardTitle>Your Events</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {loading && events.length === 0 ? (
-              <p className="text-muted-foreground">Loading...</p>
-            ) : events.length === 0 ? (
-              <p className="text-muted-foreground">No events yet</p>
-            ) : (
-              <div className="space-y-2">
-                {events.map((event) => (
-                  <div key={event.id} className="flex items-start justify-between p-3 rounded-lg border">
+        {loading && events.length === 0 ? (
+          <p className="text-muted-foreground">Loading...</p>
+        ) : events.length === 0 ? (
+          <p className="text-muted-foreground">No events yet</p>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {events.map((event) => (
+              <Card key={event.id} glass>
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
                       <p className="font-medium">{event.title}</p>
-                      {event.description && <p className="text-sm text-muted-foreground">{event.description}</p>}
-                      <p className="text-sm text-muted-foreground mt-1">
+                      {event.description && <p className="text-sm text-muted-foreground mt-1">{event.description}</p>}
+                      <p className="text-sm text-muted-foreground mt-2">
                         {new Date(event.start_time).toLocaleString()}
                       </p>
                     </div>
@@ -76,11 +79,11 @@ const Calendar = memo(() => {
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -110,9 +113,11 @@ const Calendar = memo(() => {
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
             />
-            <Button type="submit" disabled={loading}>
-              Create Event
-            </Button>
+            <div className="flex justify-end">
+              <Button type="submit" disabled={submitting}>
+                {submitting ? 'Creating...' : 'Create Event'}
+              </Button>
+            </div>
           </form>
         </DialogContent>
       </Dialog>
