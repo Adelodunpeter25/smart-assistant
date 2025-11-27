@@ -20,8 +20,11 @@ class ToolExecutor:
     """Execute tools by calling actual services."""
 
     @staticmethod
-    async def execute(db: AsyncSession, tool_name: str, parameters: dict) -> dict:
+    async def execute(db: AsyncSession, tool_name: str, parameters: dict | None) -> dict:
         """Execute a tool with given parameters."""
+        
+        if parameters is None:
+            parameters = {}
         
         # Task tools
         if tool_name == "create_task":
