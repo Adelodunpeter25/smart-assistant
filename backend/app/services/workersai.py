@@ -80,10 +80,9 @@ class WorkersAIService:
             
             if tool_calls and len(tool_calls) > 0:
                 tool_call = tool_calls[0]
-                function = tool_call.get("function", {})
                 return {
-                    "tool_name": function.get("name"),
-                    "parameters": json.loads(function.get("arguments", "{}")),
+                    "tool_name": tool_call.get("name"),
+                    "parameters": tool_call.get("arguments", {}),
                 }
             
             return {"tool_name": None, "response": response_text}
