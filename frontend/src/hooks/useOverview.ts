@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useTasks } from './useTasks';
-import { useCalendar } from './useCalendar';
-import { useTimers } from './useTimers';
-import { useNotes } from './useNotes';
+import { api } from '@/services/api';
 
 interface OverviewStats {
   tasks: number;
@@ -13,11 +10,6 @@ interface OverviewStats {
 }
 
 export const useOverview = (): OverviewStats => {
-  const { tasks, loading: tasksLoading } = useTasks();
-  const { events, loading: eventsLoading } = useCalendar();
-  const { timers, loading: timersLoading } = useTimers();
-  const { notes, loading: notesLoading } = useNotes();
-
   const [stats, setStats] = useState<OverviewStats>({
     tasks: 0,
     events: 0,
@@ -27,16 +19,29 @@ export const useOverview = (): OverviewStats => {
   });
 
   useEffect(() => {
-    const loading = tasksLoading || eventsLoading || timersLoading || notesLoading;
-    
-    setStats({
-      tasks: tasks?.length || 0,
-      events: events?.length || 0,
-      timers: timers?.filter(t => t.status === 'active').length || 0,
-      notes: notes?.length || 0,
-      loading,
-    });
-  }, [tasks, events, timers, notes, tasksLoading, eventsLoading, timersLoading, notesLoading]);
+    const fetchStats = async () => {
+      try {
+        const [tasksRes, eventsRes, timersRes, notesRes] = await Promise.all([
+          api.get('/tasks'),
+          api.get('/calendar/events'),
+          api.get('/timers'),
+          api.get('/notes'),
+        ]);
+
+        setStats({
+          tasks: tasksRes.data.data?.length || 0,
+          events: eventsRes.data.data?.length || 0,
+          timers: timersRes.data.data?.filter((t: any) => t.status === 'active').length || 0,
+          notes: notesRes.data.data?.length || 0,
+          loading: false,
+        });
+      } catch (error) {
+        setStats(prev => ({ ...prev, loading: false }));
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   return stats;
 };
