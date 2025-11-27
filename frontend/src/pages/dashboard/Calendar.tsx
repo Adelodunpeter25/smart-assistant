@@ -3,11 +3,13 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useCalendar } from '@/hooks';
 import { Plus, Trash2 } from 'lucide-react';
 
 const Calendar = memo(() => {
   const { events, loading, getEvents, createEvent, deleteEvent } = useCalendar();
+  const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -30,50 +32,22 @@ const Calendar = memo(() => {
     setDescription('');
     setStartTime('');
     setEndTime('');
+    setOpen(false);
   };
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div>
-          <h2 className="text-3xl font-bold">Calendar</h2>
-          <p className="text-muted-foreground mt-2">Manage your events</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-3xl font-bold">Calendar</h2>
+            <p className="text-muted-foreground mt-2">Manage your events</p>
+          </div>
+          <Button onClick={() => setOpen(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Event
+          </Button>
         </div>
-
-        <Card glass>
-          <CardHeader>
-            <CardTitle>Create Event</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleCreate} className="space-y-4">
-              <Input
-                placeholder="Event title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <Input
-                placeholder="Description (optional)"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-              <Input
-                type="datetime-local"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-              />
-              <Input
-                type="datetime-local"
-                placeholder="End time (optional)"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              />
-              <Button type="submit" disabled={loading}>
-                <Plus className="w-4 h-4 mr-2" />
-                Add Event
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
 
         <Card glass>
           <CardHeader>
@@ -105,6 +79,40 @@ const Calendar = memo(() => {
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create Event</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleCreate} className="space-y-4">
+            <Input
+              placeholder="Event title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <Input
+              placeholder="Description (optional)"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <Input
+              type="datetime-local"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+            />
+            <Input
+              type="datetime-local"
+              placeholder="End time (optional)"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+            />
+            <Button type="submit" disabled={loading}>
+              Create Event
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 });

@@ -3,11 +3,13 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useTasks } from '@/hooks';
 import { Plus, Trash2, Check } from 'lucide-react';
 
 const Tasks = memo(() => {
   const { tasks, loading, getTasks, createTask, deleteTask, completeTask } = useTasks();
+  const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -21,39 +23,22 @@ const Tasks = memo(() => {
     await createTask({ title, description });
     setTitle('');
     setDescription('');
+    setOpen(false);
   };
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div>
-          <h2 className="text-3xl font-bold">Tasks</h2>
-          <p className="text-muted-foreground mt-2">Manage your tasks</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-3xl font-bold">Tasks</h2>
+            <p className="text-muted-foreground mt-2">Manage your tasks</p>
+          </div>
+          <Button onClick={() => setOpen(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Task
+          </Button>
         </div>
-
-        <Card glass>
-          <CardHeader>
-            <CardTitle>Create Task</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleCreate} className="space-y-4">
-              <Input
-                placeholder="Task title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <Input
-                placeholder="Description (optional)"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-              <Button type="submit" disabled={loading}>
-                <Plus className="w-4 h-4 mr-2" />
-                Add Task
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
 
         <Card glass>
           <CardHeader>
@@ -89,6 +74,29 @@ const Tasks = memo(() => {
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create Task</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleCreate} className="space-y-4">
+            <Input
+              placeholder="Task title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <Input
+              placeholder="Description (optional)"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <Button type="submit" disabled={loading}>
+              Create Task
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 });

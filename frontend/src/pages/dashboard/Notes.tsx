@@ -3,11 +3,13 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useNotes } from '@/hooks';
 import { Plus, Trash2 } from 'lucide-react';
 
 const Notes = memo(() => {
   const { notes, loading, getNotes, createNote, deleteNote } = useNotes();
+  const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
 
@@ -21,40 +23,22 @@ const Notes = memo(() => {
     await createNote({ content, tags: tags || undefined });
     setContent('');
     setTags('');
+    setOpen(false);
   };
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div>
-          <h2 className="text-3xl font-bold">Notes</h2>
-          <p className="text-muted-foreground mt-2">Manage your notes</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-3xl font-bold">Notes</h2>
+            <p className="text-muted-foreground mt-2">Manage your notes</p>
+          </div>
+          <Button onClick={() => setOpen(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Note
+          </Button>
         </div>
-
-        <Card glass>
-          <CardHeader>
-            <CardTitle>Create Note</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleCreate} className="space-y-4">
-              <textarea
-                className="w-full min-h-[100px] p-3 rounded-lg border bg-background"
-                placeholder="Note content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              />
-              <Input
-                placeholder="Tags (comma separated)"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-              />
-              <Button type="submit" disabled={loading}>
-                <Plus className="w-4 h-4 mr-2" />
-                Add Note
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
 
         <Card glass>
           <CardHeader>
@@ -83,6 +67,30 @@ const Notes = memo(() => {
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create Note</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleCreate} className="space-y-4">
+            <textarea
+              className="w-full min-h-[100px] p-3 rounded-lg border bg-background"
+              placeholder="Note content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+            <Input
+              placeholder="Tags (comma separated)"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+            />
+            <Button type="submit" disabled={loading}>
+              Create Note
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 });
