@@ -33,8 +33,8 @@ def check_timers():
             timer.completed_at = datetime.utcnow()
             db.commit()
             
-            logger.info(f"Timer {timer.id} triggered: {timer.label or 'No label'}")
-            # TODO: Send notification to user (websocket, email, etc.)
+            notification_msg = f"⏰ Timer finished: {timer.label}" if timer.label else "⏰ Timer finished!"
+            logger.info(f"Timer {timer.id} triggered for user {timer.user_id}: {notification_msg}")
         
         if timers:
             logger.info(f"Processed {len(timers)} triggered timers")
