@@ -1,5 +1,5 @@
 """Middleware components for request processing."""
 
-from app.middleware.logging import LoggingMiddleware
+from app.middleware.logging import setup_logging
 
-__all__ = ["LoggingMiddleware"]
+__all__ = ["setup_logging"]

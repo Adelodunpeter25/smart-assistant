@@ -1,25 +1,20 @@
-"""Logging middleware for request/response tracking."""
+"""Logging configuration."""
 
-import time
 import logging
-from fastapi import Request
-from starlette.middleware.base import BaseHTTPMiddleware
+import sys
+from app.core.config import get_settings
 
-logger = logging.getLogger(__name__)
+settings = get_settings()
 
 
-class LoggingMiddleware(BaseHTTPMiddleware):
-    """Middleware to log all HTTP requests and responses."""
-
-    async def dispatch(self, request: Request, call_next):
-        """Log request details and response time."""
-        start_time = time.time()
-        
-        logger.info(f"{request.method} {request.url.path}")
-        
-        response = await call_next(request)
-        
-        duration = time.time() - start_time
-        logger.info(f"{response.status_code} - {duration:.3f}s")
-        
-        return response
+def setup_logging():
+    """Configure application logging."""
+    level = logging.DEBUG if settings.DEBUG else logging.INFO
+    
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        handlers=[logging.StreamHandler(sys.stdout)]
+    )
+    
+    logging.getLogger("uvicorn.access").setLevel(logging.INFO)
