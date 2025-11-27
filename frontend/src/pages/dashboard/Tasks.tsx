@@ -50,9 +50,16 @@ const Tasks = memo(() => {
         </div>
 
         {loading && tasks.length === 0 ? (
-          <p className="text-muted-foreground">Loading...</p>
+          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+            <CheckSquare className="w-16 h-16 text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">Loading tasks...</p>
+          </div>
         ) : tasks.length === 0 ? (
-          <p className="text-muted-foreground">No tasks yet</p>
+          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+            <CheckSquare className="w-16 h-16 text-muted-foreground mb-4" />
+            <p className="text-lg font-medium">No tasks yet</p>
+            <p className="text-sm text-muted-foreground mt-2">Create your first task to get started</p>
+          </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {tasks.map((task) => (

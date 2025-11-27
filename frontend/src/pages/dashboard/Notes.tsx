@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useNotes } from '@/hooks';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, StickyNote } from 'lucide-react';
 
 const Notes = memo(() => {
   const { notes, loading, getNotes, createNote, deleteNote } = useNotes();
@@ -50,9 +50,16 @@ const Notes = memo(() => {
         </div>
 
         {loading && notes.length === 0 ? (
-          <p className="text-muted-foreground">Loading...</p>
+          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+            <StickyNote className="w-16 h-16 text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">Loading notes...</p>
+          </div>
         ) : notes.length === 0 ? (
-          <p className="text-muted-foreground">No notes yet</p>
+          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+            <StickyNote className="w-16 h-16 text-muted-foreground mb-4" />
+            <p className="text-lg font-medium">No notes yet</p>
+            <p className="text-sm text-muted-foreground mt-2">Create your first note to get started</p>
+          </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {notes.map((note) => (

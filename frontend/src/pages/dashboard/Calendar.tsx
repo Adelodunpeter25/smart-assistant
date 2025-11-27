@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { useCalendar } from '@/hooks';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Calendar as CalendarIcon } from 'lucide-react';
 
 const Calendar = memo(() => {
   const { events, loading, getEvents, createEvent, deleteEvent } = useCalendar();
@@ -59,9 +59,16 @@ const Calendar = memo(() => {
         </div>
 
         {loading && events.length === 0 ? (
-          <p className="text-muted-foreground">Loading...</p>
+          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+            <CalendarIcon className="w-16 h-16 text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">Loading events...</p>
+          </div>
         ) : events.length === 0 ? (
-          <p className="text-muted-foreground">No events yet</p>
+          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+            <CalendarIcon className="w-16 h-16 text-muted-foreground mb-4" />
+            <p className="text-lg font-medium">No events yet</p>
+            <p className="text-sm text-muted-foreground mt-2">Create your first event to get started</p>
+          </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {events.map((event) => (

@@ -10,7 +10,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
     <div className="min-h-screen bg-background">
       <Sidebar />
       <TopBar />
-      <main className="md:ml-64 pt-16 pb-20 md:pb-6 p-6">
+      <main className="md:ml-64 pt-20 pb-20 md:pb-6 p-6">
         {children}
       </main>
       <BottomBar />
