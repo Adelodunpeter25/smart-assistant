@@ -126,7 +126,7 @@ const Notes = memo(() => {
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        onConfirm={() => deleteId && deleteNote(deleteId)}
+        onConfirm={async () => { if (deleteId) await deleteNote(deleteId); }}
         title="Delete Note"
         description="Are you sure you want to delete this note? This action cannot be undone."
       />

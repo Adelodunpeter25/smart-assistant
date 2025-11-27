@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { api } from '@/services/api';
-import type { Timer, CreateTimerRequest, CreateAlarmRequest, ApiResponse } from '@/types';
+import type { Timer } from '@/types';
 
 export function useTimers() {
   const [timers, setTimers] = useState<Timer[]>([]);
@@ -23,7 +23,7 @@ export function useTimers() {
     }
   };
 
-  const createTimer = async (data: CreateTimerRequest) => {
+  const createTimer = async (data: { duration_seconds: number; label?: string }) => {
     setLoading(true);
     setError(null);
     try {
@@ -39,7 +39,7 @@ export function useTimers() {
     }
   };
 
-  const createAlarm = async (data: CreateAlarmRequest) => {
+  const createAlarm = async (data: { trigger_time: string; label?: string }) => {
     setLoading(true);
     setError(null);
     try {
@@ -59,7 +59,7 @@ export function useTimers() {
     setLoading(true);
     setError(null);
     try {
-      await api.delete<ApiResponse>(`/timers/${id}`);
+      await api.delete(`/timers/${id}`);
       setTimers(prev => prev.filter(t => t.id !== id));
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to cancel timer');

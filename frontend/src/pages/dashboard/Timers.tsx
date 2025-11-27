@@ -129,7 +129,7 @@ const Timers = memo(() => {
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        onConfirm={() => deleteId && cancelTimer(deleteId)}
+        onConfirm={async () => { if (deleteId) await cancelTimer(deleteId); }}
         title="Cancel Timer"
         description="Are you sure you want to cancel this timer?"
       />

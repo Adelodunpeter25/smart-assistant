@@ -132,7 +132,7 @@ const Tasks = memo(() => {
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        onConfirm={() => deleteId && deleteTask(deleteId)}
+        onConfirm={async () => { if (deleteId) await deleteTask(deleteId); }}
         title="Delete Task"
         description="Are you sure you want to delete this task? This action cannot be undone."
       />

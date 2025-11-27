@@ -154,7 +154,7 @@ const Calendar = memo(() => {
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        onConfirm={() => deleteId && deleteEvent(deleteId)}
+        onConfirm={async () => { if (deleteId) await deleteEvent(deleteId); }}
         title="Delete Event"
         description="Are you sure you want to delete this event? This action cannot be undone."
       />
