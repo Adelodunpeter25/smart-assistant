@@ -12,8 +12,10 @@ export function useChat() {
     setError(null);
 
     const userMessage: Message = {
-      role: 'user',
+      id: Date.now().toString(),
       content: message,
+      isUser: true,
+      role: 'user',
       timestamp: new Date().toISOString(),
     };
     setMessages(prev => [...prev, userMessage]);
@@ -22,8 +24,10 @@ export function useChat() {
       const response = await api.post<ChatResponse>('/chat', { message } as ChatRequest);
       
       const assistantMessage: Message = {
-        role: 'assistant',
+        id: (Date.now() + 1).toString(),
         content: response.data.response,
+        isUser: false,
+        role: 'assistant',
         timestamp: new Date().toISOString(),
         tool_calls: response.data.tool_calls,
       };
