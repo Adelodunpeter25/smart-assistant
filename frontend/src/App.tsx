@@ -19,7 +19,6 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/" element={<ProtectedRoute><div>Dashboard</div></ProtectedRoute>} />
         </Routes>
       </Suspense>
     </BrowserRouter>
