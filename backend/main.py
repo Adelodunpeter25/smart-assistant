@@ -26,6 +26,7 @@ app = FastAPI(
     version=settings.APP_VERSION,
     debug=settings.DEBUG,
     lifespan=lifespan,
+    swagger_ui_parameters={"defaultModelsExpandDepth": -1},
 )
 
 app.add_middleware(
