@@ -14,7 +14,7 @@ class EmailService:
     """Service for email operations."""
 
     @staticmethod
-    async def send_email(db: AsyncSession, email_data: EmailSend) -> EmailLog:
+    async def send_email(db: AsyncSession, email_data: EmailSend, user_id: int) -> EmailLog:
         """Send an email using Resend."""
         try:
             resend.Emails.send({
@@ -28,6 +28,7 @@ class EmailService:
             status = EmailStatus.FAILED
         
         email_log = EmailLog(
+            user_id=user_id,
             recipient=email_data.recipient,
             subject=email_data.subject,
             body=email_data.body,

@@ -11,9 +11,9 @@ class CalendarService:
     """Service for calendar operations."""
 
     @staticmethod
-    async def add_event(db: AsyncSession, event_data: CalendarEventCreate) -> CalendarEvent:
+    async def add_event(db: AsyncSession, event_data: CalendarEventCreate, user_id: int) -> CalendarEvent:
         """Create a new calendar event."""
-        event = CalendarEvent(**event_data.model_dump())
+        event = CalendarEvent(**event_data.model_dump(), user_id=user_id)
         db.add(event)
         await db.flush()
         await db.refresh(event)
@@ -22,11 +22,12 @@ class CalendarService:
     @staticmethod
     async def get_events(
         db: AsyncSession,
+        user_id: int,
         start_date: datetime | None = None,
         end_date: datetime | None = None,
     ) -> list[CalendarEvent]:
         """Get calendar events with optional date filtering."""
-        query = select(CalendarEvent)
+        query = select(CalendarEvent).where(CalendarEvent.user_id == user_id)
         
         if start_date:
             query = query.where(CalendarEvent.start_time >= start_date)
@@ -38,9 +39,9 @@ class CalendarService:
         return list(result.scalars().all())
 
     @staticmethod
-    async def delete_event(db: AsyncSession, event_id: int) -> bool:
+    async def delete_event(db: AsyncSession, event_id: int, user_id: int) -> bool:
         """Delete a calendar event."""
-        query = select(CalendarEvent).where(CalendarEvent.id == event_id)
+        query = select(CalendarEvent).where(CalendarEvent.id == event_id, CalendarEvent.user_id == user_id)
         result = await db.execute(query)
         event = result.scalar_one_or_none()
         

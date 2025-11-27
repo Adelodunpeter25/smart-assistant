@@ -11,9 +11,9 @@ class TaskService:
     """Service for task operations."""
 
     @staticmethod
-    async def create_task(db: AsyncSession, task_data: TaskCreate) -> Task:
+    async def create_task(db: AsyncSession, task_data: TaskCreate, user_id: int) -> Task:
         """Create a new task."""
-        task = Task(**task_data.model_dump())
+        task = Task(**task_data.model_dump(), user_id=user_id)
         db.add(task)
         await db.flush()
         await db.refresh(task)
@@ -22,12 +22,13 @@ class TaskService:
     @staticmethod
     async def get_tasks(
         db: AsyncSession,
+        user_id: int,
         status: TaskStatus | None = None,
         skip: int = 0,
         limit: int = 100,
     ) -> list[Task]:
         """Get tasks with optional status filtering."""
-        query = select(Task)
+        query = select(Task).where(Task.user_id == user_id)
         
         if status:
             query = query.where(Task.status == status)
@@ -37,16 +38,16 @@ class TaskService:
         return list(result.scalars().all())
 
     @staticmethod
-    async def get_task(db: AsyncSession, task_id: int) -> Task | None:
+    async def get_task(db: AsyncSession, task_id: int, user_id: int) -> Task | None:
         """Get a specific task by ID."""
-        query = select(Task).where(Task.id == task_id)
+        query = select(Task).where(Task.id == task_id, Task.user_id == user_id)
         result = await db.execute(query)
         return result.scalar_one_or_none()
 
     @staticmethod
-    async def update_task(db: AsyncSession, task_id: int, task_data: TaskUpdate) -> Task | None:
+    async def update_task(db: AsyncSession, task_id: int, task_data: TaskUpdate, user_id: int) -> Task | None:
         """Update a task."""
-        query = select(Task).where(Task.id == task_id)
+        query = select(Task).where(Task.id == task_id, Task.user_id == user_id)
         result = await db.execute(query)
         task = result.scalar_one_or_none()
         
@@ -62,9 +63,9 @@ class TaskService:
         return task
 
     @staticmethod
-    async def complete_task(db: AsyncSession, task_id: int) -> Task | None:
+    async def complete_task(db: AsyncSession, task_id: int, user_id: int) -> Task | None:
         """Mark a task as completed."""
-        query = select(Task).where(Task.id == task_id)
+        query = select(Task).where(Task.id == task_id, Task.user_id == user_id)
         result = await db.execute(query)
         task = result.scalar_one_or_none()
         
@@ -79,9 +80,9 @@ class TaskService:
         return task
 
     @staticmethod
-    async def delete_task(db: AsyncSession, task_id: int) -> bool:
+    async def delete_task(db: AsyncSession, task_id: int, user_id: int) -> bool:
         """Delete a task."""
-        query = select(Task).where(Task.id == task_id)
+        query = select(Task).where(Task.id == task_id, Task.user_id == user_id)
         result = await db.execute(query)
         task = result.scalar_one_or_none()
         
