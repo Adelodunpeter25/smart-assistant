@@ -3,7 +3,7 @@
 import json
 from groq import Groq
 from app.core.config import get_settings
-from app.utils.prompts import SYSTEM_PROMPT
+from app.utils.prompts import SYSTEM_PROMPT, RESPONSE_PROMPT
 
 settings = get_settings()
 client = Groq(api_key=settings.GROQ_API_KEY)
@@ -111,8 +111,24 @@ class LLMService:
     """Service for LLM operations."""
 
     @staticmethod
-    def process_message(user_message: str) -> dict:
-        """Process user message and extract tool calls."""
+    def process_message(user_message: str, tool_result: dict | None = None) -> dict:
+        """Process user message, extract tool calls, and generate response if tool executed."""
+        
+        # If tool result provided, generate response
+        if tool_result:
+            result_summary = json.dumps(tool_result.get("data", {}), indent=2)
+            response = client.chat.completions.create(
+                model="llama-3.1-70b-versatile",
+                messages=[
+                    {"role": "system", "content": RESPONSE_PROMPT},
+                    {"role": "user", "content": f"User asked: {user_message}\n\nResult: {result_summary}\n\nGenerate a natural response:"},
+                ],
+                temperature=0.7,
+                max_tokens=200,
+            )
+            return {"response": response.choices[0].message.content}
+        
+        # Extract tool call from user message
         response = client.chat.completions.create(
             model="llama-3.1-70b-versatile",
             messages=[
@@ -132,24 +148,6 @@ class LLMService:
             return {
                 "tool_name": tool_call.function.name,
                 "parameters": json.loads(tool_call.function.arguments),
-                "assistant_message": message,
             }
 
         return {"tool_name": None, "response": message.content}
-
-    @staticmethod
-    def generate_response(user_message: str, tool_name: str, tool_result: dict) -> str:
-        """Generate natural language response after tool execution."""
-        result_summary = json.dumps(tool_result.get("data", {}), indent=2)
-        
-        response = client.chat.completions.create(
-            model="llama-3.1-70b-versatile",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant. Generate a natural, friendly response based on the tool execution result."},
-                {"role": "user", "content": f"User asked: {user_message}\n\nTool used: {tool_name}\nResult: {result_summary}\n\nGenerate a natural response:"},
-            ],
-            temperature=0.7,
-            max_tokens=200,
-        )
-
-        return response.choices[0].message.content

@@ -30,11 +30,8 @@ async def chat(
         
         # Generate natural response using LLM
         if tool_result["success"]:
-            response = LLMService.generate_response(
-                chat_request.message,
-                tool_name,
-                tool_result
-            )
+            llm_response = LLMService.process_message(chat_request.message, tool_result)
+            response = llm_response["response"]
         else:
             response = f"Sorry, I couldn't complete that: {tool_result.get('error')}"
         

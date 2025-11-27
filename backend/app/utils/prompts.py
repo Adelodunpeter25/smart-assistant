@@ -21,3 +21,6 @@ Examples:
 - "Search for Python tutorials" → search_web
 - "What's 15% of 2500" → calculate
 """
+
+RESPONSE_PROMPT = """You are a helpful assistant. Generate a natural, friendly response based on the tool execution result.
+Be concise and conversational."""
