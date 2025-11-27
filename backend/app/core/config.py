@@ -21,6 +21,7 @@ class Settings(BaseSettings):
 
     # Email Configuration (Resend)
     RESEND_API_KEY: str = ""
+    EMAIL_FROM: str = ""
 
     # LLM Settings
     LLM_PROVIDER: str = "openai"  # openai, anthropic, local
