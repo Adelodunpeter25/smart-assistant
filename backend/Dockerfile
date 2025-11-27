@@ -6,17 +6,14 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     gcc \
     postgresql-client \
-    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.cargo/bin:$PATH"
+# Install uv with retry logic
+RUN pip install --upgrade pip --no-cache-dir && \
+    pip install uv --no-cache-dir
 
-# Copy uv files
+# Copy uv files and install dependencies
 COPY pyproject.toml uv.lock ./
-
-# Install dependencies
 RUN uv sync --frozen
 
 # Copy application code
