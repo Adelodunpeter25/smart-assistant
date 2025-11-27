@@ -29,7 +29,7 @@ const Settings = memo(() => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Full Name</p>
-              <p className="font-medium">{user?.full_name || 'Not set'}</p>
+              <p className="font-medium">{user?.name || 'Not set'}</p>
             </div>
           </CardContent>
         </Card>
