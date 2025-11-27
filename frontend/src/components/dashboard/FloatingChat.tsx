@@ -1,11 +1,17 @@
 import { memo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { MessageSquare, X, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChatContainer } from '@/components/chat';
 
 export const FloatingChat = memo(() => {
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [minimized, setMinimized] = useState(false);
+
+  if (location.pathname === '/dashboard/chat') {
+    return null;
+  }
 
   if (!open) {
     return (
