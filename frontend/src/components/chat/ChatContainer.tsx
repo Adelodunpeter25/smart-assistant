@@ -6,18 +6,16 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 export const ChatContainer = memo(() => {
   const { messages, loading, sendMessage } = useChat();
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages]);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, loading]);
 
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="flex-1 p-4">
-        <div ref={scrollRef} className="space-y-4">
+        <div className="space-y-4">
           {messages.length === 0 ? (
             <div className="flex items-center justify-center h-full text-center">
               <div className="space-y-2">
@@ -40,6 +38,7 @@ export const ChatContainer = memo(() => {
               </div>
             </div>
           )}
+          <div ref={messagesEndRef} />
         </div>
       </ScrollArea>
       <div className="p-4 border-t flex-shrink-0">

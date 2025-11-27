@@ -39,14 +39,14 @@ class ToolExecutor:
             return {"success": True, "data": {"tasks": [{"id": t.id, "title": t.title, "status": t.status.value} for t in tasks]}}
         
         elif tool_name == "complete_task":
-            task_id = parameters.get("task_id")
+            task_id = int(parameters.get("task_id"))
             task = await TaskService.complete_task(db, task_id, user_id)
             if not task:
                 return {"success": False, "error": "Task not found"}
             return {"success": True, "data": {"id": task.id, "title": task.title, "status": task.status.value}}
         
         elif tool_name == "delete_task":
-            task_id = parameters.get("task_id")
+            task_id = int(parameters.get("task_id"))
             deleted = await TaskService.delete_task(db, task_id, user_id)
             if not deleted:
                 return {"success": False, "error": "Task not found"}
@@ -65,7 +65,7 @@ class ToolExecutor:
             return {"success": True, "data": {"events": [{"id": e.id, "title": e.title, "start_time": str(e.start_time)} for e in events]}}
         
         elif tool_name == "delete_event":
-            event_id = parameters.get("event_id")
+            event_id = int(parameters.get("event_id"))
             deleted = await CalendarService.delete_event(db, event_id, user_id)
             if not deleted:
                 return {"success": False, "error": "Event not found"}
@@ -88,7 +88,7 @@ class ToolExecutor:
             return {"success": True, "data": {"notes": [{"id": n.id, "content": n.content[:50]} for n in notes]}}
         
         elif tool_name == "delete_note":
-            note_id = parameters.get("note_id")
+            note_id = int(parameters.get("note_id"))
             deleted = await NoteService.delete_note(db, note_id, user_id)
             if not deleted:
                 return {"success": False, "error": "Note not found"}
@@ -139,7 +139,7 @@ class ToolExecutor:
             return {"success": True, "data": {"timers": [{"id": t.id, "type": t.type.value, "trigger_time": str(t.trigger_time), "status": t.status.value} for t in timers]}}
         
         elif tool_name == "cancel_timer":
-            timer_id = parameters.get("timer_id")
+            timer_id = int(parameters.get("timer_id"))
             timer = await TimerService.cancel_timer(db, timer_id, user_id)
             if not timer:
                 return {"success": False, "error": "Timer not found"}
