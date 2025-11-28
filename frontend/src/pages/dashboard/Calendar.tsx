@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { CardSkeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
+import { DateTimePicker } from '@/components/ui/datetime-picker';
 import { useCalendar } from '@/hooks';
 import { Plus, Trash2, Calendar as CalendarIcon } from 'lucide-react';
 
@@ -19,8 +20,8 @@ const Calendar = memo(() => {
   const [submitting, setSubmitting] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [endTime, setEndTime] = useState<Date | null>(null);
 
   useEffect(() => {
     getEvents();
@@ -36,13 +37,13 @@ const Calendar = memo(() => {
       await createEvent({
         title,
         description,
-        start_time: new Date(startTime).toISOString(),
-        end_time: endTime ? new Date(endTime).toISOString() : undefined,
+        start_time: startTime.toISOString(),
+        end_time: endTime ? endTime.toISOString() : undefined,
       });
       setTitle('');
       setDescription('');
-      setStartTime('');
-      setEndTime('');
+      setStartTime(null);
+      setEndTime(null);
       setOpen(false);
       toast.success('Event created successfully!');
     } catch {
@@ -137,21 +138,19 @@ const Calendar = memo(() => {
             </div>
             <div>
               <label className="text-sm font-medium mb-2 block">Start Date & Time</label>
-              <input
-                type="datetime-local"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
+              <DateTimePicker
+                selected={startTime}
+                onChange={setStartTime}
+                placeholderText="Select start date and time"
                 required
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
             <div>
-              <label className="text-sm font-medium mb-2 block">End Date & Time</label>
-              <input
-                type="datetime-local"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              <label className="text-sm font-medium mb-2 block">End Date & Time (Optional)</label>
+              <DateTimePicker
+                selected={endTime}
+                onChange={setEndTime}
+                placeholderText="Select end date and time"
               />
             </div>
             <div className="flex justify-end">

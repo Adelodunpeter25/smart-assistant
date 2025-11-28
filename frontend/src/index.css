@@ -134,3 +134,42 @@
 [cmdk-list] {
   @apply max-h-[400px] overflow-y-auto;
 }
+
+/* React DatePicker Styles */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker {
+  @apply bg-background border border-border rounded-lg shadow-lg;
+}
+
+.react-datepicker__header {
+  @apply bg-muted border-b border-border rounded-t-lg;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+  @apply text-foreground;
+}
+
+.react-datepicker__day {
+  @apply text-foreground hover:bg-accent;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  @apply bg-primary text-primary-foreground;
+}
+
+.react-datepicker__time-container {
+  @apply border-l border-border;
+}
+
+.react-datepicker__time-list-item {
+  @apply hover:bg-accent;
+}
+
+.react-datepicker__time-list-item--selected {
+  @apply bg-primary text-primary-foreground;
+}
