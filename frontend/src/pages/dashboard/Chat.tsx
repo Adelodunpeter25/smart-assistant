@@ -13,7 +13,7 @@ const Chat = memo(() => {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const handleNewChat = () => {
-    clearMessages();
+    window.location.reload();
   };
 
   const handleClearChat = async () => {

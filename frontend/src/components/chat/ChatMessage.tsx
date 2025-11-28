@@ -61,7 +61,7 @@ export const ChatMessage = memo(({ message, onDelete }: ChatMessageProps) => {
           <Button
             size="sm"
             variant="ghost"
-            className="h-6 w-6 p-0 bg-background hover:bg-accent"
+            className={`h-6 w-6 p-0 shadow-md ${isUser ? 'bg-background text-foreground hover:bg-accent' : 'bg-background hover:bg-accent'}`}
             onClick={handleCopy}
           >
             {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
@@ -70,7 +70,7 @@ export const ChatMessage = memo(({ message, onDelete }: ChatMessageProps) => {
             <Button
               size="sm"
               variant="ghost"
-              className="h-6 w-6 p-0 bg-background hover:bg-destructive hover:text-destructive-foreground"
+              className={`h-6 w-6 p-0 shadow-md ${isUser ? 'bg-background text-foreground hover:bg-destructive hover:text-destructive-foreground' : 'bg-background hover:bg-destructive hover:text-destructive-foreground'}`}
               onClick={handleDelete}
             >
               <Trash2 className="w-3 h-3" />
