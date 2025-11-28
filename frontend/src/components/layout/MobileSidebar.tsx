@@ -1,5 +1,5 @@
-import { memo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { memo, useState, useEffect, useCallback } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Menu, X, LayoutDashboard, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/stores';
@@ -10,6 +10,35 @@ export const MobileSidebar = memo(() => {
   const { user, isAuthenticated } = useAuthStore();
   const { logout } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen]);
+
+  const handleDashboardClick = useCallback(() => {
+    setIsOpen(false);
+    navigate('/dashboard');
+  }, [navigate]);
+
+  const handleLogoutClick = useCallback(() => {
+    setIsOpen(false);
+    logout();
+  }, [logout]);
+
+  const handleLoginClick = useCallback(() => {
+    setIsOpen(false);
+    window.dispatchEvent(new Event('openLogin'));
+  }, []);
+
+  const handleRegisterClick = useCallback(() => {
+    setIsOpen(false);
+    window.dispatchEvent(new Event('openRegister'));
+  }, []);
 
   return (
     <>
@@ -43,22 +72,22 @@ export const MobileSidebar = memo(() => {
           </button>
         </div>
         <nav className="flex flex-col p-4 space-y-4">
-          <a href="/" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
+          <Link to="/" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
             Home
-          </a>
-          <a href="/about" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
+          </Link>
+          <Link to="/about" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
             About
-          </a>
-          <a href="/contact" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
+          </Link>
+          <Link to="/contact" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
             Contact
-          </a>
+          </Link>
           <div className="pt-4 space-y-2">
             {isAuthenticated ? (
               <>
                 <div className="px-4 py-3 border rounded-lg mb-2">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold">
-                      {user?.name?.charAt(0).toUpperCase()}
+                      {user?.name?.trim().charAt(0).toUpperCase() || 'U'}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{user?.name}</p>
@@ -66,21 +95,21 @@ export const MobileSidebar = memo(() => {
                     </div>
                   </div>
                 </div>
-                <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); navigate('/dashboard'); }}>
+                <Button variant="ghost" size="sm" className="w-full justify-start" onClick={handleDashboardClick}>
                   <LayoutDashboard className="mr-2" size={18} />
                   Dashboard
                 </Button>
-                <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); logout(); }}>
+                <Button variant="ghost" size="sm" className="w-full justify-start" onClick={handleLogoutClick}>
                   <LogOut className="mr-2" size={18} />
                   Logout
                 </Button>
               </>
             ) : (
               <>
-                <Button variant="ghost" size="sm" className="w-full" onClick={() => { setIsOpen(false); window.dispatchEvent(new Event('openLogin')); }}>
+                <Button variant="ghost" size="sm" className="w-full" onClick={handleLoginClick}>
                   Sign In
                 </Button>
-                <Button size="sm" className="w-full" onClick={() => { setIsOpen(false); window.dispatchEvent(new Event('openRegister')); }}>
+                <Button size="sm" className="w-full" onClick={handleRegisterClick}>
                   Get Started
                 </Button>
               </>

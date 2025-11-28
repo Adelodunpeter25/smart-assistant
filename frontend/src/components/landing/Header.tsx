@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/contexts';
@@ -17,14 +17,14 @@ export const Header = memo(() => {
   return (
     <header className="fixed top-0 w-full z-50 glass border-b">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <a href="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <img src="/icon.svg" alt="Smart Assistant" className="w-8 h-8" />
           <span className="text-xl font-bold">Smart Assistant</span>
-        </a>
+        </Link>
         <nav className="hidden md:flex items-center gap-6">
-          <a href="/" className="text-sm hover:text-primary transition-colors">Home</a>
-          <a href="/about" className="text-sm hover:text-primary transition-colors">About</a>
-          <a href="/contact" className="text-sm hover:text-primary transition-colors">Contact</a>
+          <Link to="/" className="text-sm hover:text-primary transition-colors">Home</Link>
+          <Link to="/about" className="text-sm hover:text-primary transition-colors">About</Link>
+          <Link to="/contact" className="text-sm hover:text-primary transition-colors">Contact</Link>
         </nav>
         <div className="flex items-center gap-2">
           <button
@@ -39,7 +39,7 @@ export const Header = memo(() => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold hover:opacity-90 transition-opacity">
-                    {user?.name?.charAt(0).toUpperCase()}
+                    {user?.name?.trim().charAt(0).toUpperCase() || 'U'}
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">

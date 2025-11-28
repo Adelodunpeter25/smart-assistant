@@ -1,6 +1,6 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Search, FileText, CheckSquare, Timer, Calculator, DollarSign, X } from 'lucide-react';
+import { Search, FileText, CheckSquare, Timer, Calculator, DollarSign, X, ChevronDown } from 'lucide-react';
 
 export type ChatTemplate = 'search_web' | 'save_note' | 'create_task' | 'set_timer' | 'calculate' | 'convert_currency';
 
@@ -20,6 +20,23 @@ const templates = [
 ];
 
 export const ChatTemplates = memo(({ selected, onSelect, onCancel }: ChatTemplatesProps) => {
+  const [collapsed, setCollapsed] = useState(false);
+
+  if (collapsed) {
+    return (
+      <div className="mb-3">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setCollapsed(false)}
+        >
+          <ChevronDown className="w-4 h-4 mr-2" />
+          Show Templates
+        </Button>
+      </div>
+    );
+  }
+
   if (selected) {
     const selectedTemplate = templates.find(t => t.id === selected);
     if (!selectedTemplate) return null;
@@ -48,22 +65,35 @@ export const ChatTemplates = memo(({ selected, onSelect, onCancel }: ChatTemplat
   }
 
   return (
-    <div className="flex flex-wrap gap-2 mb-3">
-      {templates.map((template) => {
-        const Icon = template.icon;
-        return (
-          <Button
-            key={template.id}
-            variant="outline"
-            size="sm"
-            onClick={() => onSelect(template.id)}
-            className="hover:border-primary hover:bg-primary/5 hover:text-foreground"
-          >
-            <Icon className="w-4 h-4 mr-2" />
-            {template.label}
-          </Button>
-        );
-      })}
+    <div className="mb-3">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs text-muted-foreground">Quick Actions</span>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-6 w-6"
+          onClick={() => setCollapsed(true)}
+        >
+          <X className="w-3 h-3" />
+        </Button>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {templates.map((template) => {
+          const Icon = template.icon;
+          return (
+            <Button
+              key={template.id}
+              variant="outline"
+              size="sm"
+              onClick={() => onSelect(template.id)}
+              className="hover:border-primary hover:bg-primary/5 hover:text-foreground"
+            >
+              <Icon className="w-4 h-4 mr-2" />
+              {template.label}
+            </Button>
+          );
+        })}
+      </div>
     </div>
   );
 });
