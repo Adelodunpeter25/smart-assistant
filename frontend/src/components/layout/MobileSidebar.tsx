@@ -27,7 +27,7 @@ export const MobileSidebar = memo(() => {
             className="fixed inset-0 bg-black/50 z-[60] md:hidden animate-fade-in"
             onClick={() => setIsOpen(false)}
           />
-          <div className="fixed top-0 right-0 h-full w-64 bg-background border-l z-[70] md:hidden shadow-2xl animate-slide-in-right">
+          <div className="fixed top-0 right-0 h-full w-64 bg-card border-l z-[70] md:hidden shadow-2xl animate-slide-in-right overflow-y-auto">
             <div className="flex items-center justify-between p-4 border-b">
               <span className="font-bold">Menu</span>
               <button
