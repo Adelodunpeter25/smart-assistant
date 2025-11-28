@@ -1,4 +1,4 @@
-import { memo, useState, useRef, useEffect } from 'react';
+import { memo, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Send } from 'lucide-react';

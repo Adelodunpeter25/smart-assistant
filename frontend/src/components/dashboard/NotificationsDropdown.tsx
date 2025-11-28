@@ -46,7 +46,7 @@ export const NotificationsDropdown = memo(() => {
                   key={notification.id}
                   className="p-3 rounded-md hover:bg-accent transition-colors cursor-pointer"
                 >
-                  <p className="text-sm font-medium">{notification.title}</p>
+                  <p className="text-sm font-medium">{notification.title || 'Notification'}</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     {notification.message}
                   </p>

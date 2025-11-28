@@ -8,10 +8,13 @@ Multi-User Auth • Tasks • Calendar • Notes • Email • Web Search • Ca
 
 ## Tech Stack
 
-Python 3.13 • FastAPI • PostgreSQL 15 • Redis • Workers AI • Celery • WebSockets • SQLAlchemy • JWT • uv
+**Backend:** Python 3.13 • FastAPI • PostgreSQL 15 • Redis • Workers AI • Celery • WebSockets • SQLAlchemy • JWT • uv
+
+**Frontend:** React 18 • TypeScript • Vite • TailwindCSS v3 • shadcn/ui • Zustand • React Query • React Router
 
 ## Quick Start
 
+### Backend
 ```bash
 cd backend
 make install          # Install dependencies
@@ -19,6 +22,13 @@ cp .env.example .env  # Add API keys
 make db-up            # Start PostgreSQL + Redis
 make migrate          # Run migrations
 make run              # Start server + Celery (http://localhost:8000)
+```
+
+### Frontend
+```bash
+cd frontend
+npm install           # Install dependencies
+npm run dev           # Start dev server (http://localhost:5173)
 ```
 
 ## API Keys Required
@@ -40,6 +50,7 @@ make run              # Start server + Celery (http://localhost:8000)
 
 ## Architecture
 
+### Backend
 - **FastAPI** - Async REST API with WebSocket support
 - **PostgreSQL** - Primary database for users, tasks, notes, timers, notifications
 - **Redis** - Celery broker for background jobs
@@ -48,6 +59,17 @@ make run              # Start server + Celery (http://localhost:8000)
 - **WebSockets** - Real-time notifications to connected clients
 - **JWT** - Stateless authentication (access + refresh tokens)
 - **Workers AI** - LLM with function calling (llama-3.3-70b)
+
+### Frontend
+- **React 18** - UI library with hooks and functional components
+- **TypeScript** - Type-safe JavaScript
+- **Vite** - Fast build tool and dev server
+- **TailwindCSS v3** - Utility-first CSS framework
+- **shadcn/ui** - Accessible component library
+- **Zustand** - Lightweight state management
+- **React Query** - Server state management
+- **React Router** - Client-side routing
+- **IndexedDB** - Client-side chat history storage
 
 ## Docs
 

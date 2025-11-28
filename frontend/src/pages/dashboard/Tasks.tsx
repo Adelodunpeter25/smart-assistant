@@ -58,6 +58,7 @@ const Tasks = memo(() => {
     
     const optimisticTask: Task = {
       id: Date.now(),
+      user_id: 0,
       title,
       description,
       status: 'pending',
