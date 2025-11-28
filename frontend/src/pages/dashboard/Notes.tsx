@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { CardSkeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
+import { SearchBar } from '@/components/ui/search-bar';
 import { useNotes } from '@/hooks';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Plus, Trash2, StickyNote } from 'lucide-react';
@@ -21,6 +22,13 @@ const Notes = memo(() => {
   const [submitting, setSubmitting] = useState(false);
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredNotes = notes.filter(note => {
+    const query = searchQuery.toLowerCase();
+    return note.content.toLowerCase().includes(query) || 
+           (note.tags?.toLowerCase().includes(query) || false);
+  });
 
   useEffect(() => {
     getNotes();
@@ -68,31 +76,46 @@ const Notes = memo(() => {
     <DashboardLayout>
       <PullToRefresh onRefresh={handleRefresh} className="min-h-screen">
         <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-3xl font-bold">Notes</h2>
-            <p className="text-muted-foreground mt-2">Manage your notes</p>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-3xl font-bold">Notes</h2>
+              <p className="text-muted-foreground mt-2">Manage your notes</p>
+            </div>
+            <Button onClick={() => setOpen(true)}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Note
+            </Button>
           </div>
-          <Button onClick={() => setOpen(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Note
-          </Button>
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search notes..."
+          />
         </div>
 
-        {loading && notes.length === 0 ? (
+        {loading && filteredNotes.length === 0 && !searchQuery ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
           </div>
-        ) : notes.length === 0 ? (
+        ) : filteredNotes.length === 0 ? (
+          searchQuery ? (
+            <EmptyState
+              icon={<StickyNote className="w-8 h-8" />}
+              title="No notes found"
+              description={`No notes match "${searchQuery}"`}
+            />
+          ) : (
           <EmptyState
             icon={<StickyNote className="w-8 h-8" />}
             title="No notes yet"
             description="Create your first note to capture your thoughts and ideas"
             action={{ label: 'Create Note', onClick: () => setOpen(true) }}
           />
+          )
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {notes.map((note) => (
+            {filteredNotes.map((note) => (
               <Card key={note.id} glass className="card-hover animate-fade-in">
                 <CardContent className="p-4 min-h-[44px]">
                   <div className="flex items-start justify-between gap-3">

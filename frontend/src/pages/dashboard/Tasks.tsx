@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { CardSkeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
+import { SearchBar } from '@/components/ui/search-bar';
 import { useTasks } from '@/hooks';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Plus, Trash2, Check, CheckSquare } from 'lucide-react';
@@ -23,6 +24,7 @@ const Tasks = memo(() => {
   const [submitting, setSubmitting] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     getTasks();
@@ -31,6 +33,12 @@ const Tasks = memo(() => {
   useEffect(() => {
     setLocalTasks(tasks);
   }, [tasks]);
+
+  const filteredTasks = localTasks.filter(task => {
+    const query = searchQuery.toLowerCase();
+    return task.title.toLowerCase().includes(query) || 
+           (task.description?.toLowerCase().includes(query) || false);
+  });
 
   useKeyboardShortcuts([
     { key: 'n', ctrl: true, callback: () => setOpen(true) },
@@ -100,31 +108,46 @@ const Tasks = memo(() => {
     <DashboardLayout>
       <PullToRefresh onRefresh={handleRefresh} className="min-h-screen">
         <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-3xl font-bold">Tasks</h2>
-            <p className="text-muted-foreground mt-2">Manage your tasks</p>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-3xl font-bold">Tasks</h2>
+              <p className="text-muted-foreground mt-2">Manage your tasks</p>
+            </div>
+            <Button onClick={() => setOpen(true)}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Task
+            </Button>
           </div>
-          <Button onClick={() => setOpen(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Task
-          </Button>
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search tasks..."
+          />
         </div>
 
         {loading && localTasks.length === 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
           </div>
-        ) : localTasks.length === 0 ? (
+        ) : filteredTasks.length === 0 ? (
+          searchQuery ? (
+            <EmptyState
+              icon={<CheckSquare className="w-8 h-8" />}
+              title="No tasks found"
+              description={`No tasks match "${searchQuery}"`}
+            />
+          ) : (
           <EmptyState
             icon={<CheckSquare className="w-8 h-8" />}
             title="No tasks yet"
             description="Create your first task to get started and stay organized"
             action={{ label: 'Create Task', onClick: () => setOpen(true) }}
           />
+          )
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {localTasks.map((task) => (
+            {filteredTasks.map((task) => (
               <Card key={task.id} glass className="card-hover animate-fade-in">
                 <CardContent className="p-4 min-h-[44px]">
                   <div className="flex items-start justify-between gap-3">
