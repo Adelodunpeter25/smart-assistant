@@ -57,7 +57,7 @@ export const ChatTemplates = memo(({ selected, onSelect, onCancel }: ChatTemplat
             variant="outline"
             size="sm"
             onClick={() => onSelect(template.id)}
-            className="hover:border-primary hover:bg-primary/5"
+            className="hover:border-primary hover:bg-primary/5 hover:text-foreground"
           >
             <Icon className="w-4 h-4 mr-2" />
             {template.label}
