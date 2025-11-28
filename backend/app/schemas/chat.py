@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class ChatRequest(BaseModel):
     """Schema for chat request."""
     message: str
+    template: str | None = None
 
 
 class ChatResponse(BaseModel):

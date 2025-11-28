@@ -32,7 +32,7 @@ export function useChat() {
     }
   };
 
-  const sendMessage = async (message: string) => {
+  const sendMessage = async (message: string, template?: string) => {
     if (!user?.id) return;
     setLoading(true);
     setError(null);
@@ -48,7 +48,7 @@ export function useChat() {
     await idbService.saveChatMessage(user.id, userMessage);
 
     try {
-      const response = await api.post<ChatResponse>('/chat', { message } as ChatRequest);
+      const response = await api.post<ChatResponse>('/chat', { message, template } as ChatRequest);
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),

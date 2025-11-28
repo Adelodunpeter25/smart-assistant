@@ -1,5 +1,6 @@
 export interface ChatRequest {
   message: string
+  template?: string
 }
 
 export interface ChatResponse {

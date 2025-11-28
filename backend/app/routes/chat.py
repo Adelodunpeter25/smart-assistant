@@ -24,11 +24,24 @@ async def chat(
 ):
     """Process chat message and execute tools if needed."""
     
+    # Template instructions mapping
+    template_instructions = {
+        "search_web": f"Search the web for: {chat_request.message}",
+        "save_note": f"Save this as a note: {chat_request.message}",
+        "create_task": f"Create a task: {chat_request.message}",
+        "set_timer": f"Set a timer for: {chat_request.message}",
+        "calculate": f"Calculate: {chat_request.message}",
+        "convert_currency": f"Convert currency: {chat_request.message}",
+    }
+    
+    # Use template instruction if provided, otherwise use original message
+    message = template_instructions.get(chat_request.template, chat_request.message) if chat_request.template else chat_request.message
+    
     # Get LLM response with tool call
     if settings.LLM_PROVIDER == "workersai":
-        llm_result = await WorkersAIService.process_message(chat_request.message)
+        llm_result = await WorkersAIService.process_message(message)
     else:
-        llm_result = GroqService.process_message(chat_request.message)
+        llm_result = GroqService.process_message(message)
     
     # If LLM wants to use a tool, execute it
     if llm_result.get("tool_name"):
@@ -41,9 +54,9 @@ async def chat(
         # Generate natural response using LLM
         if tool_result["success"]:
             if settings.LLM_PROVIDER == "workersai":
-                llm_response = await WorkersAIService.process_message(chat_request.message, tool_result)
+                llm_response = await WorkersAIService.process_message(message, tool_result)
             else:
-                llm_response = GroqService.process_message(chat_request.message, tool_result)
+                llm_response = GroqService.process_message(message, tool_result)
             response = llm_response["response"]
         else:
             response = f"Sorry, I couldn't complete that: {tool_result.get('error')}"

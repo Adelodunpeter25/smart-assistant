@@ -2,14 +2,16 @@ import { memo, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Send } from 'lucide-react';
+import { ChatTemplates, ChatTemplate } from './ChatTemplates';
 
 interface ChatInputProps {
-  onSend: (message: string) => void;
+  onSend: (message: string, template?: ChatTemplate) => void;
   disabled?: boolean;
 }
 
 export const ChatInput = memo(({ onSend, disabled }: ChatInputProps) => {
   const [message, setMessage] = useState('');
+  const [selectedTemplate, setSelectedTemplate] = useState<ChatTemplate | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useKeyboardShortcuts([
@@ -19,13 +21,20 @@ export const ChatInput = memo(({ onSend, disabled }: ChatInputProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim() && !disabled) {
-      onSend(message.trim());
+      onSend(message.trim(), selectedTemplate || undefined);
       setMessage('');
+      setSelectedTemplate(null);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
+    <div>
+      <ChatTemplates
+        selected={selectedTemplate}
+        onSelect={setSelectedTemplate}
+        onCancel={() => setSelectedTemplate(null)}
+      />
+      <form onSubmit={handleSubmit} className="flex gap-2">
       <input
         ref={inputRef}
         type="text"
@@ -39,6 +48,7 @@ export const ChatInput = memo(({ onSend, disabled }: ChatInputProps) => {
         <Send size={20} />
       </Button>
     </form>
+    </div>
   );
 });
 
