@@ -109,3 +109,28 @@
     50% { background-position: 100% 50%; }
   }
 }
+
+/* Command Palette Styles */
+[cmdk-root] {
+  @apply bg-background;
+}
+
+[cmdk-input] {
+  @apply outline-none;
+}
+
+[cmdk-item] {
+  @apply outline-none;
+}
+
+[cmdk-group-heading] {
+  @apply text-xs font-medium text-muted-foreground px-2 py-1.5;
+}
+
+[cmdk-empty] {
+  @apply py-6 text-center text-sm text-muted-foreground;
+}
+
+[cmdk-list] {
+  @apply max-h-[400px] overflow-y-auto;
+}
