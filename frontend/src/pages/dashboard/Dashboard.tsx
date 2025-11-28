@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { StickyNote, CheckSquare, Calendar, Clock } from 'lucide-react';
+import { StickyNote, CheckSquare, Calendar, Clock, MessageSquare, Plus } from 'lucide-react';
 import { useOverview } from '@/hooks';
 import { Link } from 'react-router-dom';
 
@@ -37,30 +37,87 @@ const Dashboard = memo(() => {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card glass>
-            <CardHeader>
-              <CardTitle>Recent Activity</CardTitle>
-              <CardDescription>Your latest interactions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">No recent activity</p>
-            </CardContent>
-          </Card>
-
-          <Card glass>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>Get started with your assistant</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Link to="/dashboard/chat" className="block p-3 rounded-lg hover:bg-accent transition-colors">
-                <p className="font-medium">Start a conversation</p>
-                <p className="text-sm text-muted-foreground">Chat with your AI assistant</p>
+        <Card glass>
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+            <CardDescription>Get started quickly</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Link to="/dashboard/chat" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <MessageSquare className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-medium">AI Chat</p>
+                    <p className="text-sm text-muted-foreground">Start conversation</p>
+                  </div>
+                </div>
               </Link>
-            </CardContent>
-          </Card>
-        </div>
+              
+              <Link to="/dashboard/tasks" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors">
+                    <Plus className="w-5 h-5 text-green-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium">New Task</p>
+                    <p className="text-sm text-muted-foreground">Create a task</p>
+                  </div>
+                </div>
+              </Link>
+              
+              <Link to="/dashboard/notes" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
+                    <Plus className="w-5 h-5 text-blue-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium">New Note</p>
+                    <p className="text-sm text-muted-foreground">Create a note</p>
+                  </div>
+                </div>
+              </Link>
+              
+              <Link to="/dashboard/calendar" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
+                    <Plus className="w-5 h-5 text-purple-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium">New Event</p>
+                    <p className="text-sm text-muted-foreground">Schedule event</p>
+                  </div>
+                </div>
+              </Link>
+              
+              <Link to="/dashboard/timers" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center group-hover:bg-orange-500/20 transition-colors">
+                    <Plus className="w-5 h-5 text-orange-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium">Set Timer</p>
+                    <p className="text-sm text-muted-foreground">Create timer</p>
+                  </div>
+                </div>
+              </Link>
+              
+              <Link to="/dashboard/settings" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center group-hover:bg-muted/80 transition-colors">
+                    <CheckSquare className="w-5 h-5 text-foreground" />
+                  </div>
+                  <div>
+                    <p className="font-medium">View All</p>
+                    <p className="text-sm text-muted-foreground">Browse everything</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );
