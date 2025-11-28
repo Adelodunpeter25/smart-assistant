@@ -1,10 +1,13 @@
 import { memo, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { CardSkeleton } from '@/components/ui/skeleton';
+import { EmptyState } from '@/components/ui/empty-state';
 import { useTasks } from '@/hooks';
 import { Plus, Trash2, Check, CheckSquare } from 'lucide-react';
 
@@ -21,18 +24,7 @@ const Tasks = memo(() => {
     getTasks();
   }, []);
 
-  if (loading && tasks.length === 0) {
-    return (
-      <DashboardLayout>
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <CheckSquare className="w-16 h-16 text-muted-foreground mb-4 mx-auto animate-pulse" />
-            <p className="text-muted-foreground">Loading tasks...</p>
-          </div>
-        </div>
-      </DashboardLayout>
-    );
-  }
+
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,8 +35,30 @@ const Tasks = memo(() => {
       setTitle('');
       setDescription('');
       setOpen(false);
+      toast.success('Task created successfully!');
+    } catch {
+      toast.error('Failed to create task');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleComplete = async (id: number) => {
+    try {
+      await completeTask(id);
+      toast.success('Task completed!');
+    } catch {
+      toast.error('Failed to complete task');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    try {
+      await deleteTask(deleteId);
+      toast.success('Task deleted successfully!');
+    } catch {
+      toast.error('Failed to delete task');
     }
   };
 
@@ -62,17 +76,22 @@ const Tasks = memo(() => {
           </Button>
         </div>
 
-        {tasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-            <CheckSquare className="w-16 h-16 text-muted-foreground mb-4" />
-            <p className="text-lg font-medium">No tasks yet</p>
-            <p className="text-sm text-muted-foreground mt-2">Create your first task to get started</p>
+        {loading && tasks.length === 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
           </div>
+        ) : tasks.length === 0 ? (
+          <EmptyState
+            icon={<CheckSquare className="w-8 h-8" />}
+            title="No tasks yet"
+            description="Create your first task to get started and stay organized"
+            action={{ label: 'Create Task', onClick: () => setOpen(true) }}
+          />
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {tasks.map((task) => (
-              <Card key={task.id} glass>
-                <CardContent className="p-4">
+              <Card key={task.id} glass className="card-hover animate-fade-in">
+                <CardContent className="p-4 min-h-[44px]">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
                       <p className={`font-medium ${task.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>{task.title}</p>
@@ -80,11 +99,11 @@ const Tasks = memo(() => {
                     </div>
                     <div className="flex gap-1">
                       {task.status !== 'completed' && (
-                        <Button size="sm" variant="ghost" onClick={() => completeTask(task.id)}>
+                        <Button size="sm" variant="ghost" className="min-h-[44px] min-w-[44px]" onClick={() => handleComplete(task.id)}>
                           <Check className="w-4 h-4" />
                         </Button>
                       )}
-                      <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => { setDeleteId(task.id); setConfirmOpen(true); }}>
+                      <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700 min-h-[44px] min-w-[44px]" onClick={() => { setDeleteId(task.id); setConfirmOpen(true); }}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
@@ -132,7 +151,7 @@ const Tasks = memo(() => {
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        onConfirm={async () => { if (deleteId) await deleteTask(deleteId); }}
+        onConfirm={handleDelete}
         title="Delete Task"
         description="Are you sure you want to delete this task? This action cannot be undone."
       />

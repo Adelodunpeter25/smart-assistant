@@ -1,10 +1,13 @@
 import { memo, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { CardSkeleton } from '@/components/ui/skeleton';
+import { EmptyState } from '@/components/ui/empty-state';
 import { useTimers } from '@/hooks';
 import { Plus, Trash2, Clock } from 'lucide-react';
 
@@ -21,18 +24,7 @@ const Timers = memo(() => {
     getTimers();
   }, []);
 
-  if (loading && timers.length === 0) {
-    return (
-      <DashboardLayout>
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <Clock className="w-16 h-16 text-muted-foreground mb-4 mx-auto animate-pulse" />
-            <p className="text-muted-foreground">Loading timers...</p>
-          </div>
-        </div>
-      </DashboardLayout>
-    );
-  }
+
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,8 +35,21 @@ const Timers = memo(() => {
       setDuration('');
       setLabel('');
       setOpen(false);
+      toast.success('Timer created successfully!');
+    } catch {
+      toast.error('Failed to create timer');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleCancel = async () => {
+    if (!deleteId) return;
+    try {
+      await cancelTimer(deleteId);
+      toast.success('Timer cancelled successfully!');
+    } catch {
+      toast.error('Failed to cancel timer');
     }
   };
 
@@ -62,17 +67,22 @@ const Timers = memo(() => {
           </Button>
         </div>
 
-        {timers.length === 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-            <Clock className="w-16 h-16 text-muted-foreground mb-4" />
-            <p className="text-lg font-medium">No timers yet</p>
-            <p className="text-sm text-muted-foreground mt-2">Create your first timer to get started</p>
+        {loading && timers.length === 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
           </div>
+        ) : timers.length === 0 ? (
+          <EmptyState
+            icon={<Clock className="w-8 h-8" />}
+            title="No timers yet"
+            description="Create your first timer to track time and get notified"
+            action={{ label: 'Create Timer', onClick: () => setOpen(true) }}
+          />
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {timers.map((timer) => (
-              <Card key={timer.id} glass>
-                <CardContent className="p-4">
+              <Card key={timer.id} glass className="card-hover animate-fade-in">
+                <CardContent className="p-4 min-h-[44px]">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
                       <p className="font-medium">{timer.label || 'Timer'}</p>
@@ -81,7 +91,7 @@ const Timers = memo(() => {
                       </p>
                       <p className="text-sm text-muted-foreground">Status: {timer.status}</p>
                     </div>
-                    <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => { setDeleteId(timer.id); setConfirmOpen(true); }}>
+                    <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700 min-h-[44px] min-w-[44px]" onClick={() => { setDeleteId(timer.id); setConfirmOpen(true); }}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -129,7 +139,7 @@ const Timers = memo(() => {
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        onConfirm={async () => { if (deleteId) await cancelTimer(deleteId); }}
+        onConfirm={handleCancel}
         title="Cancel Timer"
         description="Are you sure you want to cancel this timer?"
       />

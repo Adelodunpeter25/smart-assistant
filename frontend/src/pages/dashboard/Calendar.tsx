@@ -1,10 +1,13 @@
 import { memo, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { CardSkeleton } from '@/components/ui/skeleton';
+import { EmptyState } from '@/components/ui/empty-state';
 import { useCalendar } from '@/hooks';
 import { Plus, Trash2, Calendar as CalendarIcon } from 'lucide-react';
 
@@ -23,18 +26,7 @@ const Calendar = memo(() => {
     getEvents();
   }, []);
 
-  if (loading && events.length === 0) {
-    return (
-      <DashboardLayout>
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <CalendarIcon className="w-16 h-16 text-muted-foreground mb-4 mx-auto animate-pulse" />
-            <p className="text-muted-foreground">Loading events...</p>
-          </div>
-        </div>
-      </DashboardLayout>
-    );
-  }
+
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,8 +44,21 @@ const Calendar = memo(() => {
       setStartTime('');
       setEndTime('');
       setOpen(false);
+      toast.success('Event created successfully!');
+    } catch {
+      toast.error('Failed to create event');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    try {
+      await deleteEvent(deleteId);
+      toast.success('Event deleted successfully!');
+    } catch {
+      toast.error('Failed to delete event');
     }
   };
 
@@ -71,17 +76,22 @@ const Calendar = memo(() => {
           </Button>
         </div>
 
-        {events.length === 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-            <CalendarIcon className="w-16 h-16 text-muted-foreground mb-4" />
-            <p className="text-lg font-medium">No events yet</p>
-            <p className="text-sm text-muted-foreground mt-2">Create your first event to get started</p>
+        {loading && events.length === 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
           </div>
+        ) : events.length === 0 ? (
+          <EmptyState
+            icon={<CalendarIcon className="w-8 h-8" />}
+            title="No events yet"
+            description="Create your first event to stay organized and on schedule"
+            action={{ label: 'Create Event', onClick: () => setOpen(true) }}
+          />
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {events.map((event) => (
-              <Card key={event.id} glass>
-                <CardContent className="p-4">
+              <Card key={event.id} glass className="card-hover animate-fade-in">
+                <CardContent className="p-4 min-h-[44px]">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
                       <p className="font-medium">{event.title}</p>
@@ -90,7 +100,7 @@ const Calendar = memo(() => {
                         {new Date(event.start_time).toLocaleString()}
                       </p>
                     </div>
-                    <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700" onClick={() => { setDeleteId(event.id); setConfirmOpen(true); }}>
+                    <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700 min-h-[44px] min-w-[44px]" onClick={() => { setDeleteId(event.id); setConfirmOpen(true); }}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -154,7 +164,7 @@ const Calendar = memo(() => {
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        onConfirm={async () => { if (deleteId) await deleteEvent(deleteId); }}
+        onConfirm={handleDelete}
         title="Delete Event"
         description="Are you sure you want to delete this event? This action cannot be undone."
       />
