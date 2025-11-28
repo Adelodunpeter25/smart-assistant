@@ -5,7 +5,7 @@ import { ChatInput } from './ChatInput';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 export const ChatContainer = memo(() => {
-  const { messages, loading, sendMessage } = useChat();
+  const { messages, loading, loadingHistory, sendMessage } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -16,7 +16,14 @@ export const ChatContainer = memo(() => {
     <div className="flex flex-col h-full">
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4">
-          {messages.length === 0 ? (
+          {loadingHistory ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mb-2"></div>
+                <p className="text-sm text-muted-foreground">Loading chat history...</p>
+              </div>
+            </div>
+          ) : messages.length === 0 ? (
             <div className="flex items-center justify-center h-full text-center">
               <div className="space-y-2">
                 <p className="text-lg font-medium">Start a conversation</p>

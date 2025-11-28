@@ -8,21 +8,27 @@ export function useChat() {
   const { user } = useAuthStore();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user?.id) {
       loadChatHistory();
+    } else {
+      setLoadingHistory(false);
     }
   }, [user?.id]);
 
   const loadChatHistory = async () => {
     if (!user?.id) return;
+    setLoadingHistory(true);
     try {
       const history = await idbService.getChatHistory(user.id);
       setMessages(history);
     } catch (err) {
       console.error('Failed to load chat history:', err);
+    } finally {
+      setLoadingHistory(false);
     }
   };
 
@@ -71,5 +77,5 @@ export function useChat() {
     setMessages([]);
   };
 
-  return { messages, loading, error, sendMessage, clearMessages };
+  return { messages, loading, loadingHistory, error, sendMessage, clearMessages };
 }
