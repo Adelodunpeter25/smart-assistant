@@ -84,6 +84,40 @@ class IndexedDBService {
       request.onerror = () => reject(request.error);
     });
   }
+
+  async getChatHistory(userId: number): Promise<any[]> {
+    const allMessages = await this.getAll<any>(STORES.CHAT_HISTORY);
+    return allMessages
+      .filter(msg => msg.user_id === userId)
+      .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+  }
+
+  async saveChatMessage(userId: number, message: any): Promise<void> {
+    const messageWithUser = {
+      ...message,
+      user_id: userId,
+      id: `${userId}-${Date.now()}-${Math.random()}`,
+    };
+    await this.set(STORES.CHAT_HISTORY, messageWithUser);
+    await this.trimChatHistory(userId, 50);
+  }
+
+  private async trimChatHistory(userId: number, maxMessages: number): Promise<void> {
+    const messages = await this.getChatHistory(userId);
+    if (messages.length > maxMessages) {
+      const toDelete = messages.slice(0, messages.length - maxMessages);
+      for (const msg of toDelete) {
+        await this.delete(STORES.CHAT_HISTORY, msg.id);
+      }
+    }
+  }
+
+  async clearChatHistory(userId: number): Promise<void> {
+    const messages = await this.getChatHistory(userId);
+    for (const msg of messages) {
+      await this.delete(STORES.CHAT_HISTORY, msg.id);
+    }
+  }
 }
 
 export const idbService = new IndexedDBService();

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { api } from '@/services/api';
 import { wsService } from '@/services/websocket';
+import { idbService } from '@/services/indexeddb';
 import { useAuthStore } from '@/stores';
 import type { LoginRequest, RegisterRequest, TokenResponse, User } from '@/types';
 
@@ -49,6 +50,9 @@ export function useAuth() {
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
+      if (user?.id) {
+        await idbService.clearChatHistory(user.id);
+      }
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
       clearUser();
