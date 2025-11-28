@@ -1,10 +1,21 @@
 import { memo } from 'react';
-import { useNotifications } from '@/hooks';
+import { useNavigate } from 'react-router-dom';
+import { useNotifications, useAuth } from '@/hooks';
 import { Button } from '@/components/ui/button';
-import { Bell } from 'lucide-react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Bell, User, Settings, LogOut } from 'lucide-react';
 
 export const TopBar = memo(() => {
+  const navigate = useNavigate();
   const { unreadCount } = useNotifications();
+  const { user, logout } = useAuth();
+
+  const getInitials = (name?: string, email?: string) => {
+    if (name) return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    if (email) return email[0].toUpperCase();
+    return 'U';
+  };
 
   return (
     <header className="fixed top-0 left-0 md:left-64 right-0 h-16 glass border-b flex items-center justify-between px-6 z-40">
@@ -19,6 +30,38 @@ export const TopBar = memo(() => {
             <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full"></span>
           )}
         </Button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <Avatar className="h-8 w-8">
+                <AvatarFallback>{getInitials(user?.name, user?.email)}</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium">{user?.name || 'User'}</p>
+                <p className="text-xs text-muted-foreground">{user?.email}</p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+              <User className="mr-2 h-4 w-4" />
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/dashboard/settings')}>
+              <Settings className="mr-2 h-4 w-4" />
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={logout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
