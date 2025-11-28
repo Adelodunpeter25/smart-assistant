@@ -33,9 +33,9 @@ export const TopBar = memo(() => {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <Avatar className="h-8 w-8">
-                <AvatarFallback>{getInitials(user?.name, user?.email)}</AvatarFallback>
+            <Button variant="ghost" size="icon" className="rounded-full hover:bg-accent">
+              <Avatar className="h-8 w-8 cursor-pointer">
+                <AvatarFallback className="bg-primary text-primary-foreground">{getInitials(user?.name, user?.email)}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
@@ -47,10 +47,6 @@ export const TopBar = memo(() => {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => navigate('/dashboard')}>
-              <User className="mr-2 h-4 w-4" />
-              Profile
-            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => navigate('/dashboard/settings')}>
               <Settings className="mr-2 h-4 w-4" />
               Settings

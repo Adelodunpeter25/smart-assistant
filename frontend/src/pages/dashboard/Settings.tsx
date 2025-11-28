@@ -28,7 +28,7 @@ const Settings = memo(() => {
           <CardContent>
             <div className="space-y-2">
               <p className="text-sm font-medium mb-3">Theme</p>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-4">
                 <Button
                   variant={theme === 'light' ? 'default' : 'outline'}
                   className="flex flex-col items-center gap-2 h-auto py-3"
