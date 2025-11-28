@@ -61,7 +61,7 @@ export const MobileSidebar = memo(() => {
         onClick={() => setIsOpen(false)}
       />
       <div
-        className={`fixed top-0 right-0 bottom-0 w-64 bg-card border-l z-[70] md:hidden shadow-2xl overflow-y-auto transition-transform duration-300 ${
+        className={`fixed top-0 right-0 h-full w-64 bg-background border-l z-[70] md:hidden shadow-2xl transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -75,7 +75,7 @@ export const MobileSidebar = memo(() => {
             <X size={20} />
           </button>
         </div>
-        <nav className="flex flex-col p-4 space-y-4">
+        <nav className="flex flex-col p-4 space-y-4 overflow-y-auto h-[calc(100%-4rem)]">
           <Link to="/" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
             Home
           </Link>
