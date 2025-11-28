@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
 import { useAuth } from '@/hooks';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
+import { InstallPrompt } from '@/components/common/InstallPrompt';
 import Login from '@/pages/auth/Login';
 import Register from '@/pages/auth/Register';
 import ForgotPassword from '@/pages/auth/ForgotPassword';
@@ -48,6 +49,7 @@ function App() {
   return (
     <BrowserRouter>
       <Toaster position="top-right" richColors closeButton />
+      <InstallPrompt />
       <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
         <Routes>
           <Route path="/" element={<Landing />} />
