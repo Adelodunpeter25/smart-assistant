@@ -20,12 +20,6 @@ export const ChatContainer = memo(() => {
   };
 
   useEffect(() => {
-    if (messages.length === 0) {
-      setLocalMessages([]);
-    }
-  }, [messages]);
-
-  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
 
@@ -40,7 +34,7 @@ export const ChatContainer = memo(() => {
                 <p className="text-sm text-muted-foreground">Loading chat history...</p>
               </div>
             </div>
-          ) : messages.length === 0 ? (
+          ) : localMessages.length === 0 ? (
             <div className="flex items-center justify-center h-full text-center">
               <div className="space-y-2">
                 <p className="text-lg font-medium">Start a conversation</p>
