@@ -6,9 +6,9 @@ import { TypingIndicator } from './TypingIndicator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Message } from '@/types';
 
-export const ChatContainer = memo(() => {
-  console.log('ChatContainer render, messages count:', messages?.length);
+export const ChatContainer = memo(({ maxMessages }: { maxMessages?: number }) => {
   const { messages, loading, loadingHistory, sendMessage } = useChat();
+  const displayMessages = maxMessages ? messages.slice(-maxMessages) : messages;
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const handleDeleteMessage = (id: string) => {
@@ -32,7 +32,7 @@ export const ChatContainer = memo(() => {
                 <p className="text-sm text-muted-foreground">Loading chat history...</p>
               </div>
             </div>
-          ) : messages.length === 0 ? (
+          ) : displayMessages.length === 0 ? (
             <div className="flex items-center justify-center h-full text-center">
               <div className="space-y-2">
                 <p className="text-lg font-medium">Start a conversation</p>
@@ -40,7 +40,7 @@ export const ChatContainer = memo(() => {
               </div>
             </div>
           ) : (
-            messages.map((message, index) => (
+            displayMessages.map((message, index) => (
               <ChatMessage key={index} message={message} onDelete={handleDeleteMessage} />
             ))
           )}
@@ -53,6 +53,6 @@ export const ChatContainer = memo(() => {
       </div>
     </div>
   );
-}, (prevProps, nextProps) => false); // Force re-render on every prop change
+})
 
 ChatContainer.displayName = 'ChatContainer';

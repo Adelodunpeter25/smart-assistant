@@ -14,12 +14,10 @@ const Chat = memo(() => {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const handleClearChat = () => {
-    console.log('Clear chat clicked');
     setConfirmOpen(false);
-    console.log('Calling clearMessages');
     clearMessages();
-    console.log('Showing toast');
     toast.success('Chat history cleared!');
+    window.location.reload();
   };
 
   return (
@@ -45,7 +43,7 @@ const Chat = memo(() => {
           </DropdownMenu>
         </div>
         <Card glass className="flex-1 flex flex-col overflow-hidden border-2">
-          <ChatContainer />
+          <ChatContainer maxMessages={3} />
         </Card>
       </div>
 

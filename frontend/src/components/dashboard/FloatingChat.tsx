@@ -49,7 +49,7 @@ export const FloatingChat = memo(() => {
             </div>
           </div>
           <div className="flex-1 overflow-hidden">
-            <ChatContainer />
+            <ChatContainer maxMessages={1} />
           </div>
         </div>
       )}
