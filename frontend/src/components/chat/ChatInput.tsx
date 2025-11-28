@@ -2,7 +2,8 @@ import { memo, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Send } from 'lucide-react';
-import { ChatTemplates, ChatTemplate } from './ChatTemplates';
+import { ChatTemplates } from './ChatTemplates';
+import type { ChatTemplate } from './ChatTemplates';
 
 interface ChatInputProps {
   onSend: (message: string, template?: ChatTemplate) => void;
