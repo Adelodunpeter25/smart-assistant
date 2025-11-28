@@ -10,7 +10,7 @@ interface ChatMessageProps {
 }
 
 const parseMessageWithLinks = (text: string) => {
-  const urlRegex = /(https?:\/\/[^\s,]+)/g;
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
   const parts: Array<{ type: 'text' | 'link'; content: string }> = [];
   let lastIndex = 0;
   let match;
@@ -19,7 +19,12 @@ const parseMessageWithLinks = (text: string) => {
     if (match.index > lastIndex) {
       parts.push({ type: 'text', content: text.slice(lastIndex, match.index) });
     }
-    parts.push({ type: 'link', content: match[0] });
+    // Remove trailing punctuation from URL
+    let url = match[0];
+    while (url.endsWith('.') || url.endsWith(',') || url.endsWith(')') || url.endsWith(';')) {
+      url = url.slice(0, -1);
+    }
+    parts.push({ type: 'link', content: url });
     lastIndex = match.index + match[0].length;
   }
 
