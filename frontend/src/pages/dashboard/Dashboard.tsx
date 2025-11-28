@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { StickyNote, CheckSquare, Calendar, Clock, MessageSquare, Plus } from 'lucide-react';
+import { StickyNote, CheckSquare, Calendar, Clock, Plus, Settings } from 'lucide-react';
 import { useOverview } from '@/hooks';
 import { Link } from 'react-router-dom';
 
@@ -107,11 +107,11 @@ const Dashboard = memo(() => {
               <Link to="/dashboard/settings" className="block p-4 rounded-lg border-2 border-border hover:border-foreground hover:bg-accent transition-colors group">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center group-hover:bg-muted/80 transition-colors">
-                    <CheckSquare className="w-5 h-5 text-foreground" />
+                    <Settings className="w-5 h-5 text-foreground" />
                   </div>
                   <div>
-                    <p className="font-medium">View All</p>
-                    <p className="text-sm text-muted-foreground">Browse everything</p>
+                    <p className="font-medium">Settings</p>
+                    <p className="text-sm text-muted-foreground">Manage account</p>
                   </div>
                 </div>
               </Link>
