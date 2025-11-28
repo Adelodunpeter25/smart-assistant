@@ -44,7 +44,7 @@ const Dashboard = memo(() => {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Link to="/dashboard/chat" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+              <Link to="/dashboard/chat" className="block p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-accent transition-colors group">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                     <MessageSquare className="w-5 h-5 text-primary" />
@@ -56,7 +56,7 @@ const Dashboard = memo(() => {
                 </div>
               </Link>
               
-              <Link to="/dashboard/tasks" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+              <Link to="/dashboard/tasks" className="block p-4 rounded-lg border-2 border-border hover:border-green-500 hover:bg-accent transition-colors group">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors">
                     <Plus className="w-5 h-5 text-green-500" />
@@ -68,7 +68,7 @@ const Dashboard = memo(() => {
                 </div>
               </Link>
               
-              <Link to="/dashboard/notes" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+              <Link to="/dashboard/notes" className="block p-4 rounded-lg border-2 border-border hover:border-blue-500 hover:bg-accent transition-colors group">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
                     <Plus className="w-5 h-5 text-blue-500" />
@@ -80,7 +80,7 @@ const Dashboard = memo(() => {
                 </div>
               </Link>
               
-              <Link to="/dashboard/calendar" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+              <Link to="/dashboard/calendar" className="block p-4 rounded-lg border-2 border-border hover:border-purple-500 hover:bg-accent transition-colors group">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
                     <Plus className="w-5 h-5 text-purple-500" />
@@ -92,7 +92,7 @@ const Dashboard = memo(() => {
                 </div>
               </Link>
               
-              <Link to="/dashboard/timers" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+              <Link to="/dashboard/timers" className="block p-4 rounded-lg border-2 border-border hover:border-orange-500 hover:bg-accent transition-colors group">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center group-hover:bg-orange-500/20 transition-colors">
                     <Plus className="w-5 h-5 text-orange-500" />
@@ -104,7 +104,7 @@ const Dashboard = memo(() => {
                 </div>
               </Link>
               
-              <Link to="/dashboard/settings" className="block p-4 rounded-lg border border-border hover:bg-accent transition-colors group">
+              <Link to="/dashboard/settings" className="block p-4 rounded-lg border-2 border-border hover:border-foreground hover:bg-accent transition-colors group">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center group-hover:bg-muted/80 transition-colors">
                     <CheckSquare className="w-5 h-5 text-foreground" />
