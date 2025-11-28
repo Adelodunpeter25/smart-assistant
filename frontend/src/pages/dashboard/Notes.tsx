@@ -12,11 +12,9 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { useNotes } from '@/hooks';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Plus, Trash2, StickyNote } from 'lucide-react';
-import type { Note } from '@/types';
 
 const Notes = memo(() => {
   const { notes, loading, getNotes, createNote, deleteNote } = useNotes();
-  const [localNotes, setLocalNotes] = useState<Note[]>([]);
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
@@ -27,10 +25,6 @@ const Notes = memo(() => {
   useEffect(() => {
     getNotes();
   }, []);
-
-  useEffect(() => {
-    setLocalNotes(notes);
-  }, [notes]);
 
   useKeyboardShortcuts([
     { key: 'n', ctrl: true, callback: () => setOpen(true) },
@@ -47,16 +41,6 @@ const Notes = memo(() => {
     e.preventDefault();
     if (!content.trim()) return;
     setSubmitting(true);
-    
-    const optimisticNote: Note = {
-      id: Date.now(),
-      content,
-      tags,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-    setLocalNotes(prev => [...prev, optimisticNote]);
-    
     try {
       await createNote({ content, tags: tags || undefined });
       setContent('');
@@ -64,7 +48,6 @@ const Notes = memo(() => {
       setOpen(false);
       toast.success('Note created successfully!');
     } catch {
-      setLocalNotes(notes);
       toast.error('Failed to create note');
     } finally {
       setSubmitting(false);
@@ -73,12 +56,10 @@ const Notes = memo(() => {
 
   const handleDelete = async () => {
     if (!deleteId) return;
-    setLocalNotes(prev => prev.filter(n => n.id !== deleteId));
     try {
       await deleteNote(deleteId);
       toast.success('Note deleted successfully!');
     } catch {
-      setLocalNotes(notes);
       toast.error('Failed to delete note');
     }
   };
@@ -98,11 +79,11 @@ const Notes = memo(() => {
           </Button>
         </div>
 
-        {loading && localNotes.length === 0 ? (
+        {loading && notes.length === 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
           </div>
-        ) : localNotes.length === 0 ? (
+        ) : notes.length === 0 ? (
           <EmptyState
             icon={<StickyNote className="w-8 h-8" />}
             title="No notes yet"
@@ -111,7 +92,7 @@ const Notes = memo(() => {
           />
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {localNotes.map((note) => (
+            {notes.map((note) => (
               <Card key={note.id} glass className="card-hover animate-fade-in">
                 <CardContent className="p-4 min-h-[44px]">
                   <div className="flex items-start justify-between gap-3">
