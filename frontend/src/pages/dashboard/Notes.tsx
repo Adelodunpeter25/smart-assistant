@@ -1,5 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import PullToRefresh from 'react-pull-to-refresh';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,10 +10,13 @@ import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { CardSkeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { useNotes } from '@/hooks';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Plus, Trash2, StickyNote } from 'lucide-react';
+import type { Note } from '@/types';
 
 const Notes = memo(() => {
   const { notes, loading, getNotes, createNote, deleteNote } = useNotes();
+  const [localNotes, setLocalNotes] = useState<Note[]>([]);
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
@@ -24,12 +28,35 @@ const Notes = memo(() => {
     getNotes();
   }, []);
 
+  useEffect(() => {
+    setLocalNotes(notes);
+  }, [notes]);
+
+  useKeyboardShortcuts([
+    { key: 'n', ctrl: true, callback: () => setOpen(true) },
+    { key: 'Escape', callback: () => { setOpen(false); setConfirmOpen(false); } },
+  ]);
+
+  const handleRefresh = async () => {
+    await getNotes();
+  };
+
 
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!content.trim()) return;
     setSubmitting(true);
+    
+    const optimisticNote: Note = {
+      id: Date.now(),
+      content,
+      tags,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    setLocalNotes(prev => [...prev, optimisticNote]);
+    
     try {
       await createNote({ content, tags: tags || undefined });
       setContent('');
@@ -37,6 +64,7 @@ const Notes = memo(() => {
       setOpen(false);
       toast.success('Note created successfully!');
     } catch {
+      setLocalNotes(notes);
       toast.error('Failed to create note');
     } finally {
       setSubmitting(false);
@@ -45,17 +73,20 @@ const Notes = memo(() => {
 
   const handleDelete = async () => {
     if (!deleteId) return;
+    setLocalNotes(prev => prev.filter(n => n.id !== deleteId));
     try {
       await deleteNote(deleteId);
       toast.success('Note deleted successfully!');
     } catch {
+      setLocalNotes(notes);
       toast.error('Failed to delete note');
     }
   };
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <PullToRefresh onRefresh={handleRefresh} className="min-h-screen">
+        <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold">Notes</h2>
@@ -67,11 +98,11 @@ const Notes = memo(() => {
           </Button>
         </div>
 
-        {loading && notes.length === 0 ? (
+        {loading && localNotes.length === 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
           </div>
-        ) : notes.length === 0 ? (
+        ) : localNotes.length === 0 ? (
           <EmptyState
             icon={<StickyNote className="w-8 h-8" />}
             title="No notes yet"
@@ -80,7 +111,7 @@ const Notes = memo(() => {
           />
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {notes.map((note) => (
+            {localNotes.map((note) => (
               <Card key={note.id} glass className="card-hover animate-fade-in">
                 <CardContent className="p-4 min-h-[44px]">
                   <div className="flex items-start justify-between gap-3">
@@ -97,7 +128,8 @@ const Notes = memo(() => {
             ))}
           </div>
         )}
-      </div>
+        </div>
+      </PullToRefresh>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>

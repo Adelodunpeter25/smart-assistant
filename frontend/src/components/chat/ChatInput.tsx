@@ -1,5 +1,6 @@
-import { memo, useState } from 'react';
+import { memo, useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Send } from 'lucide-react';
 
 interface ChatInputProps {
@@ -9,6 +10,11 @@ interface ChatInputProps {
 
 export const ChatInput = memo(({ onSend, disabled }: ChatInputProps) => {
   const [message, setMessage] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useKeyboardShortcuts([
+    { key: '/', callback: () => inputRef.current?.focus() },
+  ]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,6 +27,7 @@ export const ChatInput = memo(({ onSend, disabled }: ChatInputProps) => {
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
       <input
+        ref={inputRef}
         type="text"
         value={message}
         onChange={(e) => setMessage(e.target.value)}

@@ -1,5 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import PullToRefresh from 'react-pull-to-refresh';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,10 +10,13 @@ import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { CardSkeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { useTasks } from '@/hooks';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Plus, Trash2, Check, CheckSquare } from 'lucide-react';
+import type { Task } from '@/types';
 
 const Tasks = memo(() => {
   const { tasks, loading, getTasks, createTask, deleteTask, completeTask } = useTasks();
+  const [localTasks, setLocalTasks] = useState<Task[]>([]);
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
@@ -24,12 +28,37 @@ const Tasks = memo(() => {
     getTasks();
   }, []);
 
+  useEffect(() => {
+    setLocalTasks(tasks);
+  }, [tasks]);
+
+  useKeyboardShortcuts([
+    { key: 'n', ctrl: true, callback: () => setOpen(true) },
+    { key: 'Escape', callback: () => { setOpen(false); setConfirmOpen(false); } },
+  ]);
+
+  const handleRefresh = async () => {
+    await getTasks();
+  };
+
 
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
     setSubmitting(true);
+    
+    const optimisticTask: Task = {
+      id: Date.now(),
+      title,
+      description,
+      status: 'pending',
+      priority: 'medium',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    setLocalTasks(prev => [...prev, optimisticTask]);
+    
     try {
       await createTask({ title, description });
       setTitle('');
@@ -37,6 +66,7 @@ const Tasks = memo(() => {
       setOpen(false);
       toast.success('Task created successfully!');
     } catch {
+      setLocalTasks(tasks);
       toast.error('Failed to create task');
     } finally {
       setSubmitting(false);
@@ -44,27 +74,32 @@ const Tasks = memo(() => {
   };
 
   const handleComplete = async (id: number) => {
+    setLocalTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'completed' as const } : t));
     try {
       await completeTask(id);
       toast.success('Task completed!');
     } catch {
+      setLocalTasks(tasks);
       toast.error('Failed to complete task');
     }
   };
 
   const handleDelete = async () => {
     if (!deleteId) return;
+    setLocalTasks(prev => prev.filter(t => t.id !== deleteId));
     try {
       await deleteTask(deleteId);
       toast.success('Task deleted successfully!');
     } catch {
+      setLocalTasks(tasks);
       toast.error('Failed to delete task');
     }
   };
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <PullToRefresh onRefresh={handleRefresh} className="min-h-screen">
+        <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold">Tasks</h2>
@@ -76,11 +111,11 @@ const Tasks = memo(() => {
           </Button>
         </div>
 
-        {loading && tasks.length === 0 ? (
+        {loading && localTasks.length === 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
           </div>
-        ) : tasks.length === 0 ? (
+        ) : localTasks.length === 0 ? (
           <EmptyState
             icon={<CheckSquare className="w-8 h-8" />}
             title="No tasks yet"
@@ -89,7 +124,7 @@ const Tasks = memo(() => {
           />
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {tasks.map((task) => (
+            {localTasks.map((task) => (
               <Card key={task.id} glass className="card-hover animate-fade-in">
                 <CardContent className="p-4 min-h-[44px]">
                   <div className="flex items-start justify-between gap-3">
@@ -113,7 +148,8 @@ const Tasks = memo(() => {
             ))}
           </div>
         )}
-      </div>
+        </div>
+      </PullToRefresh>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
