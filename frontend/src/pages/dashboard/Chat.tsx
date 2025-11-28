@@ -1,4 +1,5 @@
 import { memo, useState } from 'react';
+import { toast } from 'sonner';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { ChatContainer } from '@/components/chat';
 import { Card } from '@/components/ui/card';
@@ -15,6 +16,7 @@ const Chat = memo(() => {
   const handleClearChat = async () => {
     await clearMessages();
     setConfirmOpen(false);
+    toast.success('Chat history cleared!');
   };
 
   return (
