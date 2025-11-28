@@ -1,10 +1,12 @@
-import { memo } from 'react';
-import { Bot, User, ExternalLink } from 'lucide-react';
+import { memo, useState } from 'react';
+import { Bot, User, ExternalLink, Copy, Trash2, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import type { Message as ChatMessageType } from '@/types';
 
 interface ChatMessageProps {
   message: ChatMessageType;
+  onDelete?: (id: string) => void;
 }
 
 const parseMessageWithLinks = (text: string) => {
@@ -28,9 +30,24 @@ const parseMessageWithLinks = (text: string) => {
   return parts.length > 0 ? parts : [{ type: 'text', content: text }];
 };
 
-export const ChatMessage = memo(({ message }: ChatMessageProps) => {
+export const ChatMessage = memo(({ message, onDelete }: ChatMessageProps) => {
   const isUser = message.role === 'user';
   const messageParts = parseMessageWithLinks(message.content);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(message.content);
+    setCopied(true);
+    toast.success('Message copied!');
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(message.id);
+      toast.success('Message deleted!');
+    }
+  };
 
   return (
     <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -39,7 +56,27 @@ export const ChatMessage = memo(({ message }: ChatMessageProps) => {
           <Bot size={18} className="text-primary-foreground" />
         </div>
       )}
-      <div className={`max-w-[70%] rounded-lg p-4 ${isUser ? 'bg-primary text-primary-foreground' : 'glass'}`}>
+      <div className={`max-w-[70%] rounded-lg p-4 group relative ${isUser ? 'bg-primary text-primary-foreground' : 'glass'}`}>
+        <div className="absolute -top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-6 w-6 p-0 bg-background hover:bg-accent"
+            onClick={handleCopy}
+          >
+            {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+          </Button>
+          {onDelete && (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-6 w-6 p-0 bg-background hover:bg-destructive hover:text-destructive-foreground"
+              onClick={handleDelete}
+            >
+              <Trash2 className="w-3 h-3" />
+            </Button>
+          )}
+        </div>
         <div className="text-sm whitespace-pre-wrap break-words overflow-wrap-anywhere">
           {messageParts.map((part, idx) => (
             part.type === 'link' ? (

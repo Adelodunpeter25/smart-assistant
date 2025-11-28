@@ -1,12 +1,22 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { useChat } from '@/hooks';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import type { Message } from '@/types';
 
 export const ChatContainer = memo(() => {
   const { messages, loading, loadingHistory, sendMessage } = useChat();
+  const [localMessages, setLocalMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setLocalMessages(messages);
+  }, [messages]);
+
+  const handleDeleteMessage = (id: string) => {
+    setLocalMessages(prev => prev.filter(m => m.id !== id));
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -31,8 +41,8 @@ export const ChatContainer = memo(() => {
               </div>
             </div>
           ) : (
-            messages.map((message, index) => (
-              <ChatMessage key={index} message={message} />
+            localMessages.map((message, index) => (
+              <ChatMessage key={index} message={message} onDelete={handleDeleteMessage} />
             ))
           )}
           {loading && (
