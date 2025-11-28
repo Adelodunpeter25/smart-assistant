@@ -4,16 +4,13 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { TypingIndicator } from './TypingIndicator';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { Message } from '@/types';
 
 export const ChatContainer = memo(({ maxMessages }: { maxMessages?: number }) => {
   const { messages, loading, loadingHistory, sendMessage } = useChat();
   const displayMessages = maxMessages ? messages.slice(-maxMessages) : messages;
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleDeleteMessage = (id: string) => {
-    // This will be handled by the parent component
-  };
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -41,7 +38,7 @@ export const ChatContainer = memo(({ maxMessages }: { maxMessages?: number }) =>
             </div>
           ) : (
             displayMessages.map((message, index) => (
-              <ChatMessage key={index} message={message} onDelete={handleDeleteMessage} />
+              <ChatMessage key={index} message={message} />
             ))
           )}
           {loading && <TypingIndicator />}
