@@ -114,9 +114,8 @@ class IndexedDBService {
 
   async clearChatHistory(userId: number): Promise<void> {
     const messages = await this.getChatHistory(userId);
-    for (const msg of messages) {
-      await this.delete(STORES.CHAT_HISTORY, msg.id);
-    }
+    const deletePromises = messages.map(msg => this.delete(STORES.CHAT_HISTORY, msg.id));
+    await Promise.all(deletePromises);
   }
 }
 

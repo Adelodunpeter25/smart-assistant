@@ -71,11 +71,13 @@ export function useChat() {
     }
   };
 
-  const clearMessages = async () => {
-    if (user?.id) {
-      await idbService.clearChatHistory(user.id);
-    }
+  const clearMessages = () => {
     setMessages([]);
+    if (user?.id) {
+      idbService.clearChatHistory(user.id).catch(err => 
+        console.error('Failed to clear IndexedDB:', err)
+      );
+    }
   };
 
   return { messages, loading, loadingHistory, error, sendMessage, clearMessages };

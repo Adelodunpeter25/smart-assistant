@@ -14,8 +14,8 @@ const Chat = memo(() => {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const handleClearChat = async () => {
-    await clearMessages();
     setConfirmOpen(false);
+    clearMessages();
     toast.success('Chat history cleared!');
   };
 
