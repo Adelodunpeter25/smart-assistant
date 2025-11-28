@@ -32,7 +32,7 @@ export const CommandPalette = memo(({ open, onOpenChange }: CommandPaletteProps)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="p-0 max-w-2xl overflow-hidden">
+      <DialogContent className="p-0 max-w-xl overflow-hidden">
         <DialogTitle className="sr-only">Search and Command Palette</DialogTitle>
         <Command className="rounded-lg border-none" shouldFilter={true}>
           <div className="flex items-center border-b px-3">
@@ -44,7 +44,7 @@ export const CommandPalette = memo(({ open, onOpenChange }: CommandPaletteProps)
               className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
-          <Command.List className="max-h-[400px] overflow-y-auto p-2">
+          <Command.List className="max-h-[500px] overflow-y-auto p-2">
             <Command.Empty className="py-6 text-center text-sm text-muted-foreground">
               No results found.
             </Command.Empty>
