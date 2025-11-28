@@ -32,8 +32,8 @@ export const MobileSidebar = () => {
 
       {isOpen && (
         <>
-          <div className="fixed inset-0 bg-black/50 z-[55] md:hidden animate-in fade-in duration-300" onClick={close} />
-          <div className="fixed top-0 left-0 bottom-0 w-72 bg-background shadow-xl z-[60] md:hidden animate-in slide-in-from-left duration-300">
+          <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={close} />
+          <div className="fixed top-0 left-0 h-screen w-72 bg-white dark:bg-gray-900 border-r z-50 md:hidden">
             <div className="p-4 border-b flex justify-between items-center">
               <span className="font-bold">Menu</span>
               <button onClick={close} className="p-2 hover:bg-accent rounded-md">

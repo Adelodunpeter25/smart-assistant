@@ -30,12 +30,12 @@ export const Features = memo(() => {
             </Card>
           ))}
         </div>
-        <div className="md:hidden overflow-x-auto scrollbar-hide">
-          <div className="flex gap-6 pb-4 px-4">
+        <div className="md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-4">
+          <div className="flex gap-6 px-4">
             {features.map((feature) => (
-              <Card key={feature.title} glass className="min-w-[280px] flex-shrink-0 transition-all hover:scale-[1.05] hover:shadow-2xl p-2">
-                <CardHeader className="space-y-4">
-                  <feature.icon className="w-14 h-14 text-primary" />
+              <Card key={feature.title} glass className="w-[70vw] flex-shrink-0 snap-center p-2">
+                <CardHeader className="space-y-6 py-8">
+                  <feature.icon className="w-16 h-16 text-primary" />
                   <CardTitle className="text-xl">{feature.title}</CardTitle>
                   <CardDescription className="text-base">{feature.description}</CardDescription>
                 </CardHeader>
