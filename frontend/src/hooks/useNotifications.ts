@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '@/services/api';
 import { wsService } from '@/services/websocket';
+import { playNotificationSound } from '@/utils/sound';
 import type { Notification } from '@/types';
 
 export function useNotifications() {
@@ -16,9 +17,11 @@ export function useNotifications() {
           message: data.message,
           is_read: false,
           created_at: new Date().toISOString(),
+          title: data.title || 'Notification',
         };
         setNotifications(prev => [newNotification, ...prev]);
         setUnreadCount(prev => prev + 1);
+        playNotificationSound();
       }
     });
 

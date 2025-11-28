@@ -2,6 +2,7 @@ import { memo, useEffect, useRef, useState } from 'react';
 import { useChat } from '@/hooks';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
+import { TypingIndicator } from './TypingIndicator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Message } from '@/types';
 
@@ -51,16 +52,7 @@ export const ChatContainer = memo(() => {
               <ChatMessage key={index} message={message} onDelete={handleDeleteMessage} />
             ))
           )}
-          {loading && (
-            <div className="flex gap-3">
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent"></span>
-              </div>
-              <div className="glass rounded-lg p-4">
-                <p className="text-sm">Thinking...</p>
-              </div>
-            </div>
-          )}
+          {loading && <TypingIndicator />}
           <div ref={messagesEndRef} />
         </div>
       </ScrollArea>
