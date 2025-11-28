@@ -5,16 +5,12 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
-import { MoreVertical, MessageSquarePlus, Trash2 } from 'lucide-react';
+import { MoreVertical, Trash2 } from 'lucide-react';
 import { useChat } from '@/hooks';
 
 const Chat = memo(() => {
   const { clearMessages } = useChat();
   const [confirmOpen, setConfirmOpen] = useState(false);
-
-  const handleNewChat = () => {
-    window.location.reload();
-  };
 
   const handleClearChat = async () => {
     await clearMessages();
@@ -35,10 +31,6 @@ const Chat = memo(() => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleNewChat}>
-                <MessageSquarePlus className="w-4 h-4 mr-2" />
-                New Chat
-              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setConfirmOpen(true)} className="text-destructive">
                 <Trash2 className="w-4 h-4 mr-2" />
                 Clear Chat
