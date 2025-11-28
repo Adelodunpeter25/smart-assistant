@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { StickyNote, CheckSquare, Calendar, Clock, Plus, Settings } from 'lucide-react';
+import { StickyNote, CheckSquare, Calendar, Clock, Plus, Settings, MessageSquare } from 'lucide-react';
 import { useOverview } from '@/hooks';
 import { Link } from 'react-router-dom';
 
