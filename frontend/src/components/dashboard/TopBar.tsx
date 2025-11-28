@@ -1,14 +1,14 @@
 import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useNotifications, useAuth } from '@/hooks';
+import { useAuth } from '@/hooks';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Bell, User, Settings, LogOut } from 'lucide-react';
+import { NotificationsDropdown } from './NotificationsDropdown';
+import { Settings, LogOut } from 'lucide-react';
 
 export const TopBar = memo(() => {
   const navigate = useNavigate();
-  const { unreadCount } = useNotifications();
   const { user, logout } = useAuth();
 
   const getInitials = (name?: string, email?: string) => {
@@ -24,12 +24,7 @@ export const TopBar = memo(() => {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell size={20} />
-          {unreadCount > 0 && (
-            <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full"></span>
-          )}
-        </Button>
+        <NotificationsDropdown />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

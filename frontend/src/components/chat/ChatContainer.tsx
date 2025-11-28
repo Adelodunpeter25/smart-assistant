@@ -41,7 +41,7 @@ export const ChatContainer = memo(() => {
           <div ref={messagesEndRef} />
         </div>
       </ScrollArea>
-      <div className="p-4 border-t flex-shrink-0">
+      <div className="p-4 border-t-2 flex-shrink-0">
         <ChatInput onSend={sendMessage} disabled={loading} />
       </div>
     </div>

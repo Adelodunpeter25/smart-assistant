@@ -11,7 +11,7 @@ const Chat = memo(() => {
           <h2 className="text-3xl font-bold">AI Chat</h2>
           <p className="text-muted-foreground">Have a conversation with your smart assistant</p>
         </div>
-        <Card glass className="flex-1 flex flex-col overflow-hidden">
+        <Card glass className="flex-1 flex flex-col overflow-hidden border-2">
           <ChatContainer />
         </Card>
       </div>

@@ -20,8 +20,8 @@ const Settings = memo(() => {
           <p className="text-muted-foreground mt-2">Manage your account settings</p>
         </div>
 
-        <Card glass>
-          <CardHeader>
+        <Card glass className="border-2">
+          <CardHeader className="border-b-2">
             <CardTitle>Appearance</CardTitle>
             <CardDescription>Customize how the app looks</CardDescription>
           </CardHeader>
@@ -58,8 +58,8 @@ const Settings = memo(() => {
           </CardContent>
         </Card>
 
-        <Card glass>
-          <CardHeader>
+        <Card glass className="border-2">
+          <CardHeader className="border-b-2">
             <CardTitle>Account Information</CardTitle>
             <CardDescription>Your account details</CardDescription>
           </CardHeader>
@@ -75,8 +75,8 @@ const Settings = memo(() => {
           </CardContent>
         </Card>
 
-        <Card glass>
-          <CardHeader>
+        <Card glass className="border-2">
+          <CardHeader className="border-b-2">
             <CardTitle>Danger Zone</CardTitle>
             <CardDescription>Irreversible actions</CardDescription>
           </CardHeader>
