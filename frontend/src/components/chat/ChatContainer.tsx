@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Message } from '@/types';
 
 export const ChatContainer = memo(() => {
+  console.log('ChatContainer render, messages count:', messages?.length);
   const { messages, loading, loadingHistory, sendMessage } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -52,6 +53,6 @@ export const ChatContainer = memo(() => {
       </div>
     </div>
   );
-});
+}, (prevProps, nextProps) => false); // Force re-render on every prop change
 
 ChatContainer.displayName = 'ChatContainer';
