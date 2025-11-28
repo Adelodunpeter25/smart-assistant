@@ -75,7 +75,8 @@ export const MobileSidebar = memo(() => {
             <X size={20} />
           </button>
         </div>
-        <nav className="flex flex-col p-4 space-y-4 overflow-y-auto h-[calc(100%-4rem)]">
+        <div className="flex flex-col h-[calc(100%-4rem)] overflow-y-auto">
+          <nav className="flex flex-col p-4 space-y-4">
           <Link to="/" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
             Home
           </Link>
@@ -119,7 +120,8 @@ export const MobileSidebar = memo(() => {
               </>
             )}
           </div>
-        </nav>
+          </nav>
+        </div>
       </div>
     </>
   );

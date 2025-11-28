@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 export const Hero = memo(() => {
   return (
-    <section className="min-h-screen flex items-center justify-center liquid-gradient">
+    <section className="min-h-screen flex items-center justify-center liquid-gradient pt-16">
       <div className="max-w-4xl mx-auto px-4 text-center space-y-8">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm font-medium">
           <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
