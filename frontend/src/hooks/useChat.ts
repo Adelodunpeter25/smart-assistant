@@ -72,7 +72,9 @@ export function useChat() {
   };
 
   const clearMessages = () => {
+    console.log('clearMessages called, current messages:', messages.length);
     setMessages([]);
+    console.log('setMessages([]) called');
     if (user?.id) {
       idbService.clearChatHistory(user.id).catch(err => 
         console.error('Failed to clear IndexedDB:', err)
