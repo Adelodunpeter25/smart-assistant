@@ -22,4 +22,5 @@ export interface Message {
   timestamp: Date | string
   toolUsed?: string
   tool_calls?: string[]
+  template?: string
 }

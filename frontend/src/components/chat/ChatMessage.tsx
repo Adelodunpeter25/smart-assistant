@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { Bot, User, ExternalLink, Copy, Trash2, Check } from 'lucide-react';
+import { Bot, User, ExternalLink, Copy, Trash2, Check, Search, FileText, CheckSquare, Timer, Calculator, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import type { Message as ChatMessageType } from '@/types';
@@ -30,6 +30,24 @@ const parseMessageWithLinks = (text: string) => {
   return parts.length > 0 ? parts : [{ type: 'text', content: text }];
 };
 
+const templateIcons: Record<string, any> = {
+  search_web: Search,
+  save_note: FileText,
+  create_task: CheckSquare,
+  set_timer: Timer,
+  calculate: Calculator,
+  convert_currency: DollarSign,
+};
+
+const templateLabels: Record<string, string> = {
+  search_web: 'Search Web',
+  save_note: 'Save Note',
+  create_task: 'Create Task',
+  set_timer: 'Set Timer',
+  calculate: 'Calculate',
+  convert_currency: 'Convert Currency',
+};
+
 export const ChatMessage = memo(({ message, onDelete }: ChatMessageProps) => {
   const isUser = message.role === 'user';
   const messageParts = parseMessageWithLinks(message.content);
@@ -57,6 +75,15 @@ export const ChatMessage = memo(({ message, onDelete }: ChatMessageProps) => {
         </div>
       )}
       <div className={`max-w-[70%] rounded-lg p-4 group relative ${isUser ? 'bg-primary text-primary-foreground' : 'glass'}`}>
+        {isUser && message.template && (
+          <div className="flex items-center gap-1.5 mb-2 pb-2 border-b border-current/20">
+            {(() => {
+              const Icon = templateIcons[message.template];
+              return Icon ? <Icon className="w-3.5 h-3.5 opacity-70" /> : null;
+            })()}
+            <span className="text-xs opacity-70">{templateLabels[message.template]}</span>
+          </div>
+        )}
         <div className="absolute -top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
           <Button
             size="sm"

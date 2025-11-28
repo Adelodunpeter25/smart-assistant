@@ -43,6 +43,7 @@ export function useChat() {
       isUser: true,
       role: 'user',
       timestamp: new Date().toISOString(),
+      template,
     };
     setMessages(prev => [...prev, userMessage]);
     await idbService.saveChatMessage(user.id, userMessage);
