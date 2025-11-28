@@ -14,6 +14,7 @@ const Chat = memo(() => {
 
   const handleClearChat = async () => {
     await clearMessages();
+    setConfirmOpen(false);
   };
 
   return (

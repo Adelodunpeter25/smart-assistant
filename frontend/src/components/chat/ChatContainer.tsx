@@ -19,6 +19,12 @@ export const ChatContainer = memo(() => {
   };
 
   useEffect(() => {
+    if (messages.length === 0) {
+      setLocalMessages([]);
+    }
+  }, [messages]);
+
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
 
