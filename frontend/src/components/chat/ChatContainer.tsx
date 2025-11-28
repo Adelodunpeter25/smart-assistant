@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { useChat } from '@/hooks';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
@@ -8,20 +8,17 @@ import type { Message } from '@/types';
 
 export const ChatContainer = memo(() => {
   const { messages, loading, loadingHistory, sendMessage } = useChat();
-  const [localMessages, setLocalMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setLocalMessages(messages);
-  }, [messages]);
-
   const handleDeleteMessage = (id: string) => {
-    setLocalMessages(prev => prev.filter(m => m.id !== id));
+    // This will be handled by the parent component
   };
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, loading]);
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  }, [messages.length, loading]);
 
   return (
     <div className="flex flex-col h-full">
@@ -34,7 +31,7 @@ export const ChatContainer = memo(() => {
                 <p className="text-sm text-muted-foreground">Loading chat history...</p>
               </div>
             </div>
-          ) : localMessages.length === 0 ? (
+          ) : messages.length === 0 ? (
             <div className="flex items-center justify-center h-full text-center">
               <div className="space-y-2">
                 <p className="text-lg font-medium">Start a conversation</p>
@@ -42,7 +39,7 @@ export const ChatContainer = memo(() => {
               </div>
             </div>
           ) : (
-            localMessages.map((message, index) => (
+            messages.map((message, index) => (
               <ChatMessage key={index} message={message} onDelete={handleDeleteMessage} />
             ))
           )}
