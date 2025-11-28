@@ -12,16 +12,17 @@ export const MobileSidebar = memo(() => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isOpen) return;
-    document.body.style.overflow = 'hidden';
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => {
-      document.body.style.overflow = '';
-      document.removeEventListener('keydown', handleEscape);
-    };
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setIsOpen(false);
+      };
+      document.addEventListener('keydown', handleEscape);
+      return () => {
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', handleEscape);
+      };
+    }
   }, [isOpen]);
 
   const handleDashboardClick = useCallback(() => {
@@ -54,75 +55,75 @@ export const MobileSidebar = memo(() => {
         <Menu size={24} />
       </button>
 
-      <div
-        className={`fixed inset-0 bg-black/50 z-[60] md:hidden transition-opacity duration-300 ${
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-        onClick={() => setIsOpen(false)}
-      />
-      <div
-        className={`fixed top-0 right-0 h-full w-64 bg-background border-l z-[70] md:hidden shadow-2xl transition-transform duration-300 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
-        <div className="flex items-center justify-between p-4 border-b">
-          <span className="font-bold">Menu</span>
-          <button
+      {isOpen && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/50 z-[60] md:hidden"
             onClick={() => setIsOpen(false)}
-            className="p-2 rounded-md hover:bg-accent transition-colors"
-            aria-label="Close menu"
-          >
-            <X size={20} />
-          </button>
-        </div>
-        <div className="flex flex-col h-[calc(100%-4rem)] overflow-y-auto">
-          <nav className="flex flex-col p-4 space-y-4">
-          <Link to="/" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
-            Home
-          </Link>
-          <Link to="/about" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
-            About
-          </Link>
-          <Link to="/contact" className="text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
-            Contact
-          </Link>
-          <div className="pt-4 space-y-2">
-            {isAuthenticated ? (
-              <>
-                <div className="px-4 py-3 border rounded-lg mb-2">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold">
-                      {user?.name?.trim().charAt(0).toUpperCase() || 'U'}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{user?.name}</p>
-                      <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
-                    </div>
-                  </div>
+          />
+          <div className="fixed top-0 right-0 bottom-0 w-72 bg-background border-l z-[70] md:hidden shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b shrink-0">
+              <span className="font-bold">Menu</span>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-2 rounded-md hover:bg-accent transition-colors"
+                aria-label="Close menu"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-4">
+              <div className="space-y-4">
+                <Link to="/" className="block text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
+                  Home
+                </Link>
+                <Link to="/about" className="block text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
+                  About
+                </Link>
+                <Link to="/contact" className="block text-sm hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
+                  Contact
+                </Link>
+                
+                <div className="pt-4 border-t space-y-3">
+                  {isAuthenticated ? (
+                    <>
+                      <div className="px-4 py-3 border rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold shrink-0">
+                            {user?.name?.trim().charAt(0).toUpperCase() || 'U'}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate">{user?.name}</p>
+                            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="sm" className="w-full justify-start" onClick={handleDashboardClick}>
+                        <LayoutDashboard className="mr-2" size={18} />
+                        Dashboard
+                      </Button>
+                      <Button variant="ghost" size="sm" className="w-full justify-start" onClick={handleLogoutClick}>
+                        <LogOut className="mr-2" size={18} />
+                        Logout
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button variant="ghost" size="sm" className="w-full" onClick={handleLoginClick}>
+                        Sign In
+                      </Button>
+                      <Button size="sm" className="w-full" onClick={handleRegisterClick}>
+                        Get Started
+                      </Button>
+                    </>
+                  )}
                 </div>
-                <Button variant="ghost" size="sm" className="w-full justify-start" onClick={handleDashboardClick}>
-                  <LayoutDashboard className="mr-2" size={18} />
-                  Dashboard
-                </Button>
-                <Button variant="ghost" size="sm" className="w-full justify-start" onClick={handleLogoutClick}>
-                  <LogOut className="mr-2" size={18} />
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="ghost" size="sm" className="w-full" onClick={handleLoginClick}>
-                  Sign In
-                </Button>
-                <Button size="sm" className="w-full" onClick={handleRegisterClick}>
-                  Get Started
-                </Button>
-              </>
-            )}
+              </div>
+            </div>
           </div>
-          </nav>
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 });
