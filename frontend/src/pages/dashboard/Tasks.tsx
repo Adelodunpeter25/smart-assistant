@@ -69,11 +69,13 @@ const Tasks = memo(() => {
     setLocalTasks(prev => [...prev, optimisticTask]);
     
     try {
-      await createTask({ title, description });
+      const newTask = await createTask({ title, description });
+      setLocalTasks(prev => prev.map(t => t.id === optimisticTask.id ? newTask : t));
       setTitle('');
       setDescription('');
       setOpen(false);
       toast.success('Task created successfully!');
+      await getTasks();
     } catch {
       setLocalTasks(tasks);
       toast.error('Failed to create task');
