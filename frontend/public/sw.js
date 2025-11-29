@@ -1,4 +1,5 @@
-const CACHE_NAME = 'smart-assistant-v1';
+const CACHE_VERSION = 'v1';
+const CACHE_NAME = `smart-assistant-${CACHE_VERSION}-${new Date().toISOString().split('T')[0]}`;
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -23,13 +24,28 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
-          .filter((name) => name !== CACHE_NAME)
+          .filter((name) => name.startsWith('smart-assistant-') && name !== CACHE_NAME)
           .map((name) => caches.delete(name))
       );
     })
   );
   self.clients.claim();
 });
+
+// Check cache age every 24 hours
+setInterval(() => {
+  caches.keys().then((cacheNames) => {
+    cacheNames.forEach((cacheName) => {
+      if (cacheName.startsWith('smart-assistant-')) {
+        const cacheDate = cacheName.split('-').pop();
+        const today = new Date().toISOString().split('T')[0];
+        if (cacheDate !== today) {
+          caches.delete(cacheName);
+        }
+      }
+    });
+  });
+}, 24 * 60 * 60 * 1000); // 24 hours
 
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
